@@ -11,7 +11,7 @@ services:
 
   app:
     build: .
-    # command: python manage.py runserver 0.0.0.0:$DJANGO_PORT
+    command: python manage.py runserver 0.0.0.0:$DJANGO_PORT
     env_file:
       - .env
     environment:
