@@ -59,6 +59,9 @@ SECURE_SSL_REDIRECT = False
 # enable secure cookies if not in debug mode
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
+# for django debug toolbar
+INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "").split(";")
+print(INTERNAL_IPS)
 
 
 # Application definition
@@ -71,6 +74,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     "core",
     "users",
 ]
@@ -84,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"

@@ -28,4 +28,6 @@ user_patterns = [
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include((user_patterns, "users"), namespace="users")),
+    # debug toolbar
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
