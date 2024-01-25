@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import secrets
+from django.urls import reverse_lazy
 import dotenv
 import os
 import dj_database_url
@@ -150,6 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "users.User"
+LOGIN_URL = reverse_lazy("users:login")
 
 
 # Storage Backends
