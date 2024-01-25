@@ -20,4 +20,13 @@
 /* layer: default */
 .static{position:static;}
 .mx-auto{margin-left:auto;margin-right:auto;}
+.mb-3{margin-bottom:0.75rem;}
 .block{display:block;}
+.h-90vh{height:90vh;}
+.max-w-80{max-width:20rem;}
+.w-full{width:100%;}
+.flex{display:flex;}
+.items-center{align-items:center;}
+.justify-center{justify-content:center;}
+.text-center{text-align:center;}
+.text-sm{font-size:0.875rem;line-height:1.25rem;}

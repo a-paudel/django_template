@@ -1,0 +1,33 @@
+{% extends 'base.j2' %}
+{% block main %}
+    <div class="h-90vh flex items-center justify-center">
+        <form method="post" class="form">
+            <div class="card max-w-80">
+                <div class="card-header">
+                    <h1 class="text-center">Login</h1>
+                </div>
+                <div class="card-body">
+                    {{ csrf_input }}
+                    {% for error in form.non_field_errors() %}<span class="block text-danger-emphasis">{{ error }}</span>{% endfor %}
+                    {% for field in form %}
+                        <div class="form-floating mb-3">
+                            {{ field }}
+                            {{ field.label_tag() }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}<span class="block">{{ error }}</span>{% endfor %}
+                            </div>
+                            <!-- help text -->
+                            <div class="form-text">{{ field.help_text }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                </div>
+            </div>
+            <p class="text-center">
+                Don't have an account? <a href='{{ url_for("users:register") }}?next={{ next }}'>Register</a>
+            </p>
+        </form>
+    </div>
+{% endblock %}

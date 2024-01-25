@@ -4,7 +4,7 @@ export default defineConfig({
     cli: {
         entry: {
             outFile: "./static/css/uno.css",
-            patterns: ["./**/*.html", "./**/*.j2", "./**/*.py"]
+            patterns: ["./**/*.{html,j2,py}"]
         }
     }
 })
