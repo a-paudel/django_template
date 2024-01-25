@@ -37,17 +37,21 @@ SECRET_KEY = os.getenv(
 )
 
 ALLOWED_HOSTS = [
-    os.getenv("DJANGO_HOST", "localhost"),
+    os.getenv("DJANGO_HOST"),
 ]
+if DEBUG:
+    ALLOWED_HOSTS += [
+        "localhost",
+        "127.0.0.1",
+    ]
 
 
 # production settings
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
-if os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS") or "" != "":
-    CSRF_TRUSTED_ORIGINS += os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(";")
+
+CSRF_TRUSTED_ORIGINS = []
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += ["http://localhost:8000", "http://127.0.0.1:8000"]
+CSRF_TRUSTED_ORIGINS += os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(";")
 
 SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", 0 if DEBUG else 86400))
 # ssl redirect is handled by the reverse proxy so set to false or we get infinite redirects

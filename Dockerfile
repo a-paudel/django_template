@@ -6,4 +6,4 @@ COPY pyproject.toml pdm.lock ./
 RUN pdm install --global --project .
 
 COPY . .
-CMD gunicorn config.wsgi:application -w 4 -t 10
+CMD gunicorn config.wsgi:application -w 4 -t 10 --bind 0.0.0.0:$DJANGO_PORT
