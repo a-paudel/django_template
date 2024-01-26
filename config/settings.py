@@ -62,7 +62,6 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 # for django debug toolbar
 INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "").split(";")
-print(INTERNAL_IPS)
 
 
 # Application definition

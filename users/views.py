@@ -10,7 +10,7 @@ from users.forms import UserLoginForm, UserRegisterForm
 
 
 class UserLoginView(LoginView):
-    template_name = "users/login.j2"
+    template_name = "users/login.html"
     form_class = UserLoginForm
     redirect_authenticated_user = True
     redirect_field_name = "next"
@@ -30,7 +30,7 @@ class UserLoginView(LoginView):
 
 class UserRegisterView(CreateView):
     form_class = UserRegisterForm
-    template_name = "users/register.j2"
+    template_name = "users/register.html"
 
     def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None:
         self.next = request.GET.get("next", "/")
