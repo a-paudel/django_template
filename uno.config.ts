@@ -48,7 +48,7 @@ export default defineConfig({
         // components
         "button": "inverse hover:opacity-80 cursor-pointer p2 text-base border-none rounded",
         "card": "base border-base border rounded-lg shadow-base p4",
-        "input": "base border-base border rounded p2 focus:outline-none focus:ring-2 focus:ring-primary",
+        "input": "base border-base border rounded p2 focus:outline-none focus:ring-2 focus:ring-primary flex-1",
         "link": "cursor-pointer text-muted hover:text-opacity-100 decoration-none",
     }
 })
