@@ -14,7 +14,7 @@ class BaseForm(forms.Form):
 
             # add error class
             if field_name in self.errors:
-                current_class = f"{current_class} border-red"
+                current_class = f"{current_class} border-red-6"
 
             # apply the new class
             field.widget.attrs["class"] = current_class
