@@ -1,4 +1,4 @@
-import { defineConfig, presetUno, presetWebFonts } from "unocss";
+import { defineConfig, presetIcons, presetUno, presetWebFonts } from "unocss";
 
 export default defineConfig({
     presets: [
@@ -10,7 +10,12 @@ export default defineConfig({
             fonts: {
                 sans: "Ubuntu",
             }
-        })
+        }),
+        presetIcons({
+            collections: {
+                carbon: () => import("@iconify-json/carbon/icons.json").then(i => i.default),
+            }
+        }),
     ],
     cli: {
         entry: {

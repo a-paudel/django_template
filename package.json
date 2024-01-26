@@ -1,1 +1,6 @@
-{ "dependencies": { "unocss": "^0.58.3" } }
+{
+  "dependencies": { "unocss": "^0.58.3" },
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.1.28"
+  }
+}
