@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,8 +14,8 @@
         <script src='{{static("js/htmx-sse.js")}}'></script>
         <script src='{{static("js/htmx-ws.js")}}'></script>
     </head>
-    <body>
-        <main class="container mx-auto">
+    <body class="base font-sans m0 p0">
+        <main class="container mx-auto min-h-screen flex flex-col">
             {% block main %}{% endblock %}
         </main>
     </body>

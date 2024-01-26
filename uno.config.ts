@@ -1,10 +1,16 @@
-import { defineConfig, presetUno } from "unocss";
+import { defineConfig, presetUno, presetWebFonts } from "unocss";
 
 export default defineConfig({
     presets: [
         presetUno({
-            dark: "class"
+            dark: "media",
         }),
+        presetWebFonts({
+            provider: "bunny",
+            fonts: {
+                sans: "Ubuntu",
+            }
+        })
     ],
     cli: {
         entry: {
@@ -14,24 +20,30 @@ export default defineConfig({
     },
     theme: {
         colors: {
-            "bg": "#f2f2f2",
-            "fg": "#000000",
-            // accent for shadows, borders, etc.
-            "accent": "gray",
-            // muted colors
-            "muted": "gray",
-            // border colros
-            "border": "gray",
-            "input": "gray",
-            // button colors
-            "primary": "steelblue",
-            "primary-fg": "#ffffff",
-            "secondary": "gray",
-            "secondary-fg": "#ffffff",
-            "success": "green",
-            "success-fg": "#ffffff",
-            "danger": "red",
-            "danger-fg": "#ffffff",
+            dark: "#020817",
+            light: "#fafafa",
+            primary: "#3b82f6",
         }
     },
+    shortcuts: {
+        "bg-base": "bg-light dark:bg-dark",
+        "text-base": "text-dark dark:text-light",
+        "base": "bg-base text-base",
+        // 
+        "bg-inverse": "bg-dark dark:bg-light",
+        "text-inverse": "text-light dark:text-dark",
+        "inverse": "bg-inverse !text-inverse",
+        // 
+        "text-muted": "text-base text-opacity-70 dark:text-opacity-70",
+        // 
+        "border-base": "border-solid border-dark border-opacity-50 dark:border-light dark:border-opacity-50",
+        "border-inverse": "border-solid border-light border-opacity-80 dark:border-dark dark:border-opacity-80",
+        // 
+        "shadow-base": "shadow-dark dark:shadow-light shadow shadow-opacity-30 dark:shadow-opacity-30",
+        // components
+        "button": "inverse hover:opacity-80 cursor-pointer p2 text-base border-none rounded",
+        "card": "base border-base border rounded-lg shadow-base p4",
+        "input": "base border-base border rounded p2 focus:outline-none focus:ring-2 focus:ring-primary",
+        "link": "cursor-pointer text-muted hover:text-opacity-100 decoration-none",
+    }
 })

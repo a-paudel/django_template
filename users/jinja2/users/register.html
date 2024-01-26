@@ -1,32 +1,24 @@
 {% extends 'base.html' %}
 {% block main %}
-    <div class="h-90vh flex items-center justify-center">
+    <div class="flex-1 flex items-center justify-center">
         <form method="post" class="form">
             <div class="card max-w-80">
-                <div class="card-header">
-                    <h1 class="text-center">Register</h1>
-                </div>
-                <div class="card-body">
-                    {{ csrf_input }}
-                    {% for error in form.non_field_errors() %}<span class="block text-danger-emphasis">{{ error }}</span>{% endfor %}
-                    {% for field in form %}
-                        <div class="form-floating mb-3">
-                            {{ field }}
-                            {{ field.label_tag() }}
-                            <div class="invalid-feedback">
-                                {% for error in field.errors %}<span class="block">{{ error }}</span>{% endfor %}
-                            </div>
-                            <!-- help text -->
-                            <div class="form-text text-sm">{{ field.help_text|safe }}</div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary w-full">Register</button>
-                </div>
+                <h1 class="text-center m0 mb2">Register</h1>
+                {{ csrf_input }}
+                {% for error in form.non_field_errors() %}<span class="block text-sm text-red">{{ error }}</span>{% endfor %}
+                {% for field in form %}
+                    <div class="flex flex-col mb-3">
+                        {{ field.label_tag() }}
+                        {% for error in field.errors %}<span class="block text-sm text-red">{{ error }}</span>{% endfor %}
+                        {{ field }}
+                        <!-- help text -->
+                        <div class="text-sm text-muted">{{ field.help_text|safe }}</div>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="button w-full !primary">Register</button>
             </div>
             <p class="text-center">
-                Already have an account? <a href='{{ url_for("users:login") }}?next={{ next }}'>Login</a>
+                Already have an account? <a href='{{ url_for("users:login") }}?next={{ next }}' class="link">Login</a>
             </p>
         </form>
     </div>
