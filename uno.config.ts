@@ -8,7 +8,7 @@ export default defineConfig({
     ],
     cli: {
         entry: {
-            outFile: "./static/css/uno.css",
+            outFile: "./static/css/main.css",
             patterns: ["./**/*.{html,j2,py}"]
         }
     },
