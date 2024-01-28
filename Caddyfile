@@ -4,5 +4,10 @@
 		file_server
 	}
 
+	handle_path /media/* {
+		root * /app/media
+		file_server
+	}
+
 	reverse_proxy server:{$DJANGO_PORT}
 }
