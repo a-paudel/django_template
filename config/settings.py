@@ -37,9 +37,8 @@ SECRET_KEY = os.getenv(
     else "".join(secrets.token_urlsafe() for _ in range(3)),
 )
 
-ALLOWED_HOSTS = [
-    os.getenv("DJANGO_HOST"),
-]
+ALLOWED_HOSTS = os.getenv("DJANGO_HOST", "").split(";")
+
 if DEBUG:
     ALLOWED_HOSTS += [
         "localhost",
@@ -67,6 +66,9 @@ INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "").split(";")
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

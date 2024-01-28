@@ -9,15 +9,13 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
-  app:
+  server:
     build: .
     command: python manage.py runserver 0.0.0.0:$DJANGO_PORT
     env_file:
       - .env
     environment:
       - DJANGO_DB_URL=postgres://postgres:postgres@db:5432/postgres
-    ports:
-      - "$DJANGO_PORT:$DJANGO_PORT"
     depends_on: [db]
     develop:
       watch:
