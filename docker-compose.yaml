@@ -11,12 +11,14 @@ services:
 
   server:
     build: .
-    command: python manage.py runserver 0.0.0.0:$DJANGO_PORT
+    command: python manage.py runserver 0.0.0.0:$DJANGO_PORT  --nostatic
     env_file:
       - .env
     environment:
       - DJANGO_DB_URL=postgres://postgres:postgres@db:5432/postgres
     depends_on: [db]
+    volumes:
+      - static_files:/app/static
     develop:
       watch:
         - action: sync
@@ -26,5 +28,21 @@ services:
         - action: rebuild
           path: pyproject.toml
 
+  proxy:
+    image: caddy:alpine
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+    depends_on: [server]
+    env_file:
+      - .env
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - static_files:/app/static:ro
+
 volumes:
   db_data:
+  caddy_data:
+  caddy_config:
+  static_files:

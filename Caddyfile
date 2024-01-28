@@ -1,0 +1,8 @@
+{$CADDY_LISTEN_ADDR} {
+	handle_path /static/* {
+		root * /app/static
+		file_server
+	}
+
+	reverse_proxy server:{$DJANGO_PORT}
+}

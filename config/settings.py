@@ -37,7 +37,7 @@ SECRET_KEY = os.getenv(
     else "".join(secrets.token_urlsafe() for _ in range(3)),
 )
 
-ALLOWED_HOSTS = os.getenv("DJANGO_HOST", "").split(";")
+ALLOWED_HOSTS = os.getenv("DJANGO_HOST", "localhost").split(";")
 
 if DEBUG:
     ALLOWED_HOSTS += [
@@ -74,7 +74,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "debug_toolbar",
     "core",
@@ -83,7 +82,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -157,11 +155,14 @@ LOGIN_URL = reverse_lazy("users:login")
 
 # Storage Backends
 STORAGES = {
-    # ...
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
