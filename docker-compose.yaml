@@ -40,12 +40,10 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - static_files:/app/static:ro
       - media_files:/app/media:ro
 
 volumes:
   db_data:
   caddy_data:
   caddy_config:
-  static_files:
   media_files:

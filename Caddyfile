@@ -1,9 +1,4 @@
 {$CADDY_LISTEN_ADDR} {
-	handle_path /static/* {
-		root * /app/static
-		file_server
-	}
-
 	handle_path /media/* {
 		root * /app/media
 		file_server
