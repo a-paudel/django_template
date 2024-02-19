@@ -18,7 +18,6 @@ services:
       - DJANGO_DB_URL=postgres://postgres:postgres@db:5432/postgres
     depends_on: [db]
     volumes:
-      - static_files:/app/static
       - media_files:/app/media
     develop:
       watch:
