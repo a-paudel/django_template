@@ -1,24 +1,25 @@
 {% extends 'base.html' %}
 {% block main %}
     <div class="flex-1 flex flex-col items-center justify-center">
-        <div class="card w-full max-w-80">
-            <form method="post" class="form">
-                <h1 class="text-center m0 mb2">Login</h1>
+        <div class="card bg-base-200 card-bordered w-full max-w-80">
+            <form method="post" class="card-body">
+                <div class="prose">
+                    <h1 class="text-center m0 mb2">Login</h1>
+                </div>
                 {{ csrf_input }}
-                {% for error in form.non_field_errors() %}<span class="block text-sm text-red-6">{{ error }}</span>{% endfor %}
+                {% for error in form.non_field_errors() %}<span class="block text-sm text-error">{{ error }}</span>{% endfor %}
                 {% for field in form %}
                     <fieldset class="flex flex-col border-0 px0">
                         {{ field.label_tag() }}
-                        {% for error in field.errors %}<span class="block text-sm text-red-6">{{ error }}</span>{% endfor %}
+                        {% for error in field.errors %}<span class="block text-sm text-error">{{ error }}</span>{% endfor %}
                         {{ field }}
                         <!-- help text -->
-                        <div class="text-sm text-muted">{{ field.help_text|safe }}</div>
+                        <div class="text-sm opacity-70">{{ field.help_text|safe }}</div>
                     </fieldset>
                 {% endfor %}
-                <button type="submit"
-                        class="button w-full !primary flex gap4 items-center justify-center text-1rem">
+                <button type="submit" class="btn btn-primary">
                     <span>Login</span>
-                    <div class="i-carbon-login"></div>
+                    <div class="icon-[carbon--login]"></div>
                 </button>
             </form>
         </div>

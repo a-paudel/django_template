@@ -6,7 +6,7 @@
         <title>
             {% block title %}App Name Goes Here{% endblock %}
         </title>
-        <link rel="stylesheet" href='{{ static("css/main.css") }}'>
+        <link rel="stylesheet" href='{{ static("css/tw.css") }}'>
         <!--  -->
         <script src='{{static("js/hyperscript.min.js")}}'></script>
         <!--  -->
@@ -14,7 +14,7 @@
         <script src='{{static("js/htmx-sse.js")}}'></script>
         <script src='{{static("js/htmx-ws.js")}}'></script>
     </head>
-    <body class="base font-sans m0 p0">
+    <body class="">
         <main class="container mx-auto min-h-screen flex flex-col">
             {% block main %}{% endblock %}
         </main>

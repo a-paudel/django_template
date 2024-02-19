@@ -10,11 +10,11 @@ class BaseForm(forms.Form):
 
             # add form-control class to all fields
             current_class = field.widget.attrs.get("class", "")
-            current_class = f"{current_class} input"
+            current_class = f"{current_class} input input-bordered"
 
             # add error class
             if field_name in self.errors:
-                current_class = f"{current_class} border-red-6"
+                current_class = f"{current_class} input-error"
 
             # apply the new class
             field.widget.attrs["class"] = current_class
