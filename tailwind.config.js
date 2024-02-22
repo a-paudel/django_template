@@ -1,3 +1,7 @@
+import typography from "@tailwindcss/typography"
+import { addDynamicIconSelectors } from "@iconify/tailwind"
+import daisyui from "daisyui"
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -8,9 +12,9 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require("@tailwindcss/typography"),
-    require("daisyui"),
-    require("@iconify/tailwind").addDynamicIconSelectors(),
+    typography,
+    daisyui,
+    addDynamicIconSelectors(),
   ],
 }
 
