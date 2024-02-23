@@ -23,7 +23,7 @@ class BaseForm(forms.Form):
             else:
                 current_class += "input input-bordered"
 
-            if field.error_messages:
+            if field_name in self.errors:
                 if is_checkbox or is_radio:
                     continue
                 elif is_textarea:
