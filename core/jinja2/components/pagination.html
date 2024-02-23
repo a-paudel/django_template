@@ -1,0 +1,30 @@
+{% set first_link, prev_link, next_link, last_link = get_page_links(request, page, paginator) %}
+<div class="flex items-center justify-between">
+    <p>Showing items {{ page.start_index() }} to {{ page.end_index() }} of {{ paginator.count }}</p>
+    <div class="join">
+        <!-- left arrow -->
+        <a href="{{ prev_link }}"
+           class="join-item btn {% if not page.has_previous() %}btn-disabled{% endif %}"><i class="icon-[carbon--arrow-left]"></i></a>
+        <!-- first -->
+        {% if page.number - 1 > 1 %}<a href="{{ first_link }}" class="join-item btn">1</a>{% endif %}
+        <!-- ellipsis -->
+        {% if page.number - 1 > 2 %}<p class="btn join-item btn-disabled">...</p>{% endif %}
+        <!-- previous -->
+        {% if page.has_previous() %}
+            <a href="{{ prev_link }}" class="join-item btn">{{ page.previous_page_number() }}</a>
+        {% endif %}
+        <!-- current -->
+        <a href="" class="join-item btn btn-active">{{ page.number }}</a>
+        <!-- next -->
+        {% if page.has_next() %}<a href="{{ next_link }}" class="join-item btn">{{ page.next_page_number() }}</a>{% endif %}
+        <!-- ellipsis -->
+        {% if paginator.num_pages - page.number > 2 %}<p class="join-item btn btn-disabled">...</p>{% endif %}
+        <!-- last -->
+        {% if paginator.num_pages - page.number > 1 %}
+            <a href="{{ last_link }}" class="join-item btn">{{ paginator.num_pages }}</a>
+        {% endif %}
+        <!-- right arrow -->
+        <a href="{{ next_link }}"
+           class="join-item btn {% if not page.has_next() %}btn-disabled{% endif %}"><i class="icon-[carbon--arrow-right]"></i></a>
+    </div>
+</div>
