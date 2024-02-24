@@ -3,6 +3,7 @@ from django.templatetags.static import static
 from jinja2 import Environment
 from django.core.paginator import Paginator, Page
 from django.http import HttpRequest
+from django_vite.templatetags.django_vite import vite_hmr_client, vite_asset
 
 
 def _custom_reverse(name, **kwargs):
@@ -27,6 +28,8 @@ def environment(**options):
     env = Environment(**options)
     env.globals.update(
         {
+            "vite_hmr_client": vite_hmr_client,
+            "vite_asset": vite_asset,
             "url_for": _custom_reverse,
             "static": static,
             "get_page_links": _get_page_links,

@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:646d6f9c417e9a2124e3f761a9c09d0767a74402f9261a4b06d19837dcd088fe"
+content_hash = "sha256:38af300117bb3c977ceebcc285c58d2e0b6bc964453684b393157da3cde5a720"
 
 [[package]]
 name = "asgiref"
@@ -75,6 +75,19 @@ dependencies = [
 files = [
     {file = "django_unfold-0.20.1-py3-none-any.whl", hash = "sha256:b03d58b68bc94785dbb7f5bf1c83bf39fc048398902699be611fe31ec3994f7f"},
     {file = "django_unfold-0.20.1.tar.gz", hash = "sha256:52fde4e6ba1bb74e8b1dec6f51729a4ea5e316e3ad54258af54122dc105199da"},
+]
+
+[[package]]
+name = "django-vite"
+version = "3.0.3"
+summary = "Integration of Vite in a Django project."
+groups = ["default"]
+dependencies = [
+    "Django>=3.2",
+]
+files = [
+    {file = "django-vite-3.0.3.tar.gz", hash = "sha256:0738e6fe49ed097ab8e9e22ac78776584735948e118d3875817f78a87acaac82"},
+    {file = "django_vite-3.0.3-py3-none-any.whl", hash = "sha256:3efe96d93cd77dfca4d8274c49db9dd43c545c95daab3c6b1e3dabf2236df943"},
 ]
 
 [[package]]

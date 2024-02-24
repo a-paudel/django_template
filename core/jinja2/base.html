@@ -6,13 +6,8 @@
         <title>
             {% block title %}App Name Goes Here{% endblock %}
         </title>
-        <link rel="stylesheet" href='{{ static("css/tw.css") }}'>
-        <!--  -->
-        <script src='{{static("js/hyperscript.min.js")}}'></script>
-        <!--  -->
-        <script src='{{static("js/htmx.min.js")}}'></script>
-        <script src='{{static("js/htmx-sse.js")}}'></script>
-        <script src='{{static("js/htmx-ws.js")}}'></script>
+        {{vite_hmr_client()}}
+        {{vite_asset("resources/js/app.js")}}
     </head>
     <body class="">
         <main class="container mx-auto min-h-screen flex flex-col">
