@@ -11,6 +11,7 @@ class BaseForm(forms.Form):
             is_checkbox = isinstance(field.widget, forms.CheckboxInput)
             is_radio = isinstance(field.widget, forms.RadioSelect)
             is_textarea = isinstance(field.widget, forms.Textarea)
+            is_select = isinstance(field.widget, forms.Select)
 
             current_class = field.widget.attrs.get("class", "") + " "
 
@@ -18,6 +19,8 @@ class BaseForm(forms.Form):
                 current_class += "toggle"
             elif is_radio:
                 current_class += "radio"
+            elif is_select:
+                current_class += "select select-bordered"
             elif is_textarea:
                 current_class += "textarea textarea-bordered"
             else:
@@ -26,6 +29,8 @@ class BaseForm(forms.Form):
             if field_name in self.errors:
                 if is_checkbox or is_radio:
                     continue
+                elif is_select:
+                    current_class += " select-error"
                 elif is_textarea:
                     current_class += " textarea-error"
                 else:
