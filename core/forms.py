@@ -1,5 +1,6 @@
 from django import forms
 
+
 class BaseForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -11,7 +12,7 @@ class BaseForm(forms.Form):
             is_radio = isinstance(field.widget, forms.RadioSelect)
             is_textarea = isinstance(field.widget, forms.Textarea)
 
-            current_class = field.widget.attrs.get("class", "")
+            current_class = field.widget.attrs.get("class", "") + " "
 
             if is_checkbox:
                 current_class += "toggle"
