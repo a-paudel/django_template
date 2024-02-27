@@ -1,4 +1,6 @@
-import "vite/modulepreload-polyfill"
-import "htmx.org"
+import "vite/modulepreload-polyfill";
+import htmx from "htmx.org";
 
-import "../css/app.css"
+import "../css/app.css";
+
+window.htmx = htmx;
