@@ -1,12 +1,14 @@
 import typography from "@tailwindcss/typography"
 import { addDynamicIconSelectors } from "@iconify/tailwind"
-import daisyui from "daisyui"
+import daisyui from 'daisyui'
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    './**/*.html',
-    './**/*.py',
+    "./**/*.{html,css,js,py,j2}",
+    "!./node_modules/**/*",
+    "!./.git/**/*",
+    "!./.venv/**/*",
   ],
   theme: {
     extend: {},

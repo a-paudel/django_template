@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "dev": "concurrently \"vite --host\" \"python manage.py runserver 0.0.0.0:8000\" ",
     "watch": "tailwindcss -i ./input.css -o ./static/css/tw.css --watch"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.28",
     "autoprefixer": "^10.4.17",
+    "concurrently": "^8.2.2",
     "postcss": "^8.4.35"
   }
 }
