@@ -1,0 +1,10 @@
+{
+    "type": "module",
+    "scripts": {
+        "dev": "vite & python manage.py runserver",
+        "build": "vite build"
+    },
+    "dependencies": {
+        "vite": "^5.2.11"
+    }
+}
