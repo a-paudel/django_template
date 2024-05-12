@@ -58,7 +58,9 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
         "DIRS": [BASE_DIR / "jinja"],
-        "OPTIONS": {},
+        "OPTIONS": {
+            "environment": "config.jinja2.environment",
+        },
     },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

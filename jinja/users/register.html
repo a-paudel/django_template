@@ -1,0 +1,21 @@
+{% extends "layouts/users.html" %}
+
+{% block title %}
+    Register
+{% endblock title %}
+
+{% block main %}
+    <div class="prose text-center">
+        <h2>Register</h2>
+    </div>
+    <div class="divider"></div>
+    <form action="" method="post" class="flex flex-col gap-4">
+        {{ csrf_input }}
+        {{ form.as_div() }}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <p class="text-right">
+        Already have an account? <a href="{{ url("users:login") }}" class="link">Login Now</a>
+    </p>
+
+{% endblock main %}

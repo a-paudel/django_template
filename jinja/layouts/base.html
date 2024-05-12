@@ -7,13 +7,13 @@
             {% block title %}
             {% endblock title %}
 
-            {% if self.title() %}|{% endif %}
+            {% if self.title().strip() %}|{% endif %}
             App Title
         </title>
-
         {{ vite_asset("resources/js/app.js") }}
 
     </head>
+
     <body>
         {% block body %}
         {% endblock body %}

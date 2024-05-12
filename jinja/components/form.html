@@ -1,0 +1,17 @@
+{# non field errors #}
+{% for error in form.non_field_errors() %}<span class="block text-error">{{ error }}</span>{% endfor %}
+{% for field in form %}
+    <div>
+        {# label #}
+        <div class="{% if field.errors %} text-error {% endif %}">{{ field.label_tag() }}</div>
+        {# form #}
+        {{ field }}
+
+        {# errors #}
+        {% for error in field.errors %}<span class="block text-error">{{ error }}</span>{% endfor %}
+
+        {# help text #}
+        <span class="text-sm opacity-80">{{ field.help_text|safe }}</span>
+
+    </div>
+{% endfor %}
