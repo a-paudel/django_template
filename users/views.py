@@ -60,6 +60,7 @@ class PasswordResetView(_DjangoPasswordResetView):
     template_name = "users/password_reset.html"
     form_class = PasswordResetForm
     success_url = reverse_lazy("users:password_reset_email_sent")
+    subject_template_name = "users/emails/password_reset_subject.txt"
     email_template_name = "users/emails/password_reset_email.html"
     html_email_template_name = "users/emails/password_reset_email.html"
 
