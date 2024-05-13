@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:228bb33842402d06d6146a959048f0f905ddf827490c3a63157bfe32d0f88650"
+content_hash = "sha256:76b89c109d600952962de4104f24bc6081983433b3591475fee355a1069b3abf"
 
 [[package]]
 name = "asgiref"
@@ -113,4 +113,15 @@ marker = "sys_platform == \"win32\""
 files = [
     {file = "tzdata-2024.1-py2.py3-none-any.whl", hash = "sha256:9068bc196136463f5245e51efda838afa15aaeca9903f49050dfa2679db4d252"},
     {file = "tzdata-2024.1.tar.gz", hash = "sha256:2674120f8d891909751c38abcdfd386ac0a5a1127954fbc332af6b5ceae07efd"},
+]
+
+[[package]]
+name = "whitenoise"
+version = "6.6.0"
+requires_python = ">=3.8"
+summary = "Radically simplified static file serving for WSGI applications"
+groups = ["default"]
+files = [
+    {file = "whitenoise-6.6.0-py3-none-any.whl", hash = "sha256:b1f9db9bf67dc183484d760b99f4080185633136a273a03f6436034a41064146"},
+    {file = "whitenoise-6.6.0.tar.gz", hash = "sha256:8998f7370973447fac1e8ef6e8ded2c5209a7b1f67c1012866dbcd09681c3251"},
 ]
