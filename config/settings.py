@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from django.urls import reverse_lazy
 import dotenv
 import os
 
@@ -124,6 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "users.User"
+LOGIN_URL = reverse_lazy("users:login")
 
 
 # Internationalization
