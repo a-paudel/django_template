@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django_vite",
     "debug_toolbar",
     "django_celery_results",
+    "django_celery_beat",
     "core",
     "users",
 ]
@@ -161,6 +162,7 @@ CELERY_BROKER_URL = (
 )
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

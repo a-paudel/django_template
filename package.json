@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"python manage.py runserver\" \"celery -A config worker -l INFO\"",
+    "dev": "concurrently \"vite\" \"python manage.py runserver\" \"celery -A config worker --beat -l INFO\" \"celery -A config flower\"",
     "build": "vite build"
   },
   "dependencies": {
