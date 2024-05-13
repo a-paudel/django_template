@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "vite & python manage.py runserver & celery -A config worker -l INFO",
+    "dev": "concurrently \"vite\" \"python manage.py runserver\" \"celery -A config worker -l INFO\"",
     "build": "vite build"
   },
   "dependencies": {
@@ -9,6 +9,7 @@
     "@iconify/tailwind": "^1.0.1",
     "@tailwindcss/typography": "^0.5.13",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
     "daisyui": "^4.11.1",
     "vite": "^5.2.11"
   },

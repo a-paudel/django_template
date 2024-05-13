@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_vite",
     "debug_toolbar",
+    "django_celery_results",
     "core",
     "users",
 ]
@@ -158,6 +159,8 @@ CELERY_BROKER_URL = (
     + "/"
     + os.getenv("DJANGO_REDIS_DATABASE", "")
 )
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
