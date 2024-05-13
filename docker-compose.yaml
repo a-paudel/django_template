@@ -1,0 +1,59 @@
+x-build: &build
+  build: .
+  depends_on: [db, redis, mailpit]
+  env_file: .env
+  environment:
+    - PORT=8000
+    - DJANGO_DB_URL=mysql://demo:pass@db:3306/db_name
+    - DJANGO_REDIS_URL=redis://redis:6379/0
+    - DJANGO_DEBUG=false
+    - DJANGO_EMAIL_HOST=mailpit
+    - DJANGO_EMAIL_FROM_ADDRESS=demo@djangoappname.com
+    - DJANGO_EMAIL_FROM_NAME="${DJANGO_APP_NAME}"
+    - DJANGO_EMAIL_TLS=true
+
+services:
+  db:
+    image: bitnami/mariadb:latest
+    environment:
+      - MARIADB_ROOT_PASSWORD=secret
+      - MARIADB_USER=demo
+      - MARIADB_PASSWORD=pass
+      - MARIADB_DATABASE=db_name
+    volumes:
+      - db_data:/bitnami/mariadb
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "-ppass", "ping"]
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis_data:/bitnami/redis
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8080:8025"
+  server:
+    <<: *build
+    ports:
+      - "8000:8000"
+  celery-worker:
+    <<: *build
+    command: pdm run celery -A config worker -l INFO
+  celery-beat:
+    <<: *build
+    command: pdm run celery -A config beat -l INFO
+  celery-flower:
+    <<: *build
+    command: pdm run celery -A config flower
+    ports:
+      - "5555:5555"
+
+volumes:
+  db_data:
+  redis_data:

@@ -13,7 +13,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from django.urls import reverse_lazy
 import dotenv
+import dj_database_url
 import os
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 dotenv.load_dotenv()
 
@@ -99,10 +103,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(default=os.getenv("DJANGO_DB_URL", "sqlite:///db.sqlite3"))
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
 }
 
 
@@ -156,14 +161,7 @@ EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
 # Celery settings
-CELERY_BROKER_URL = (
-    "redis://"
-    + f"{os.getenv('DJANGO_REDIS_USERNAME')}:{os.getenv('DJANGO_REDIS_PASSWORD')}"
-    + "@"
-    + f"{os.getenv('DJANGO_REDIS_HOST')}:{os.getenv('DJANGO_REDIS_PORT')}"
-    + "/"
-    + os.getenv("DJANGO_REDIS_DATABASE", "")
-)
+CELERY_BROKER_URL = os.getenv("DJANGO_REDIS_URL")
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
