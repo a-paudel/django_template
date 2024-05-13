@@ -8,7 +8,7 @@
             {% endblock title %}
 
             {% if self.title().strip() %}|{% endif %}
-            App Title
+            {{ config.APP_NAME }}
         </title>
         {{ vite_asset("resources/js/app.js") }}
 
