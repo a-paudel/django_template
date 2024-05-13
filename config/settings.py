@@ -149,6 +149,16 @@ EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
 EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
+# Celery settings
+CELERY_BROKER_URL = (
+    "redis://"
+    + f"{os.getenv('DJANGO_REDIS_USERNAME')}:{os.getenv('DJANGO_REDIS_PASSWORD')}"
+    + "@"
+    + f"{os.getenv('DJANGO_REDIS_HOST')}:{os.getenv('DJANGO_REDIS_PORT')}"
+    + "/"
+    + os.getenv("DJANGO_REDIS_DATABASE", "")
+)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

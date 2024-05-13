@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "vite & python manage.py runserver",
+    "dev": "vite & python manage.py runserver & celery -A config worker -l INFO",
     "build": "vite build"
   },
   "dependencies": {
