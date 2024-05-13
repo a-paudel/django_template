@@ -18,3 +18,11 @@ class RegisterForm(BaseForm, _DjangoUserCreationForm):
 
 class LoginForm(BaseForm, _DjangoAuthenticationForm):
     pass
+
+
+class PasswordResetForm(BaseForm, _DjangoPasswordResetForm):
+    pass
+
+
+class PasswordSetForm(BaseForm, _DjangoSetPasswordForm):
+    pass

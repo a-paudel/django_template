@@ -34,7 +34,6 @@ class UserManager(_DjangoUserManager):
 
 
 class User(BaseModel, AbstractUser):
-    username = None
     email = models.EmailField(unique=True)
     email_validated_on = models.DateTimeField(blank=True, null=True)
 

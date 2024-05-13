@@ -18,12 +18,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from users.views import LoginView, LogoutView, RegisterView
+from users.views import (
+    LoginView,
+    LogoutView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetEmailSentView,
+    PasswordResetView,
+    RegisterView,
+)
 
 users_paths = [
     path("login/", LoginView.as_view(), name="login"),
     path("register/", RegisterView.as_view(), name="register"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("password-reset/", PasswordResetView.as_view(), name="password_reset"),
+    path("password-reset/email-sent/", PasswordResetEmailSentView.as_view(), name="password_reset_email_sent"),
+    path("password-reset/<uidb64>/<token>", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path("password-reset/complete", PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 ]
 
 
@@ -31,4 +43,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # add user routes
     path("users/", include((users_paths, "users"), namespace="users")),
+    path("password-reset/<uidb64>/<token>", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
 ]

@@ -136,6 +136,14 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
 
+# Email settings
+EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST")
+EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
+EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
+EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
+DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
