@@ -14,7 +14,7 @@ def environment(**options):
 
     env.globals.update(
         {
-            "url": _django_reverse,
+            "url": custom_reverse,
             "static": static,
             "config": settings,
             # vite

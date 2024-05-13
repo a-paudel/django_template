@@ -43,5 +43,4 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # add user routes
     path("users/", include((users_paths, "users"), namespace="users")),
-    path("password-reset/<uidb64>/<token>", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
 ]
