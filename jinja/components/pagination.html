@@ -1,0 +1,66 @@
+ 
+{% if paginator.num_pages > 1 %}
+    <div class="{% if show_summary %} flex items-end justify-between {% endif %}">
+        {% if show_summary %}
+            <div>Showing {{ page.start_index() }} - {{ page.end_index() }} of {{ paginator.count }} {{ object_name }}</div>
+        {% endif %}
+
+        <nav class="join">
+            {# left arrow #}
+            <a href="{{ get_page_link(request, page.number-1, with_query_params) }}"
+               class="btn join-item {% if page.number <= 1 %}btn-disabled{% endif %}">
+                <i class="icon-[carbon--chevron-left]"></i>
+            </a>
+
+            {# start links #}
+            {% for i in range(1, on_ends+1) %}
+                {% if i < page.number %}
+                    <a href="{{ get_page_link(request, i, with_query_params) }}"
+                       class="join-item btn">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {# ellipsis #}
+            {% if (page.number-on_each_side) - (on_ends) > 1 %}<span class="join-item btn btn-disabled">...</span>{% endif %}
+
+            {# previous page links #}
+            {% for i in range(page.number-on_each_side, page.number) %}
+                {% if i > on_ends %}
+                    <a href="{{ get_page_link(request, i, with_query_params) }}"
+                       class="join-item btn">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+ 
+
+            {# current page #}
+            <span class="join-item btn btn-active">{{ page.number }}</span>
+
+            {# next page links #}
+            {% for i in range(page.number+1, page.number+on_each_side+1) %}
+                {% if i < (paginator.num_pages - on_ends) %}
+                    <a href="{{ get_page_link(request, i, with_query_params) }}"
+                       class="join-item btn">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {# ellipsis #}
+            {% if (paginator.num_pages - on_ends +1) - (page.number + on_each_side) > 1 %}
+                <span class="join-item btn btn-disabled">...</span>
+            {% endif %}
+
+            {# end links #}
+            {% for i in range(paginator.num_pages-on_ends+1, paginator.num_pages+1) %}
+                {% if i > page.number %}
+                    <a href="{{ get_page_link(request, i, with_query_params) }}"
+                       class="join-item btn">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {# right arrow #}
+            <a href="{{ get_page_link(request, page.number+1, with_query_params) }}"
+               class="btn join-item {% if page.number >= paginator.num_pages %}btn-disabled{% endif %}">
+                <i class="icon-[carbon--chevron-right]"></i>
+            </a>
+        </nav>
+    </div>
+{% endif %}
