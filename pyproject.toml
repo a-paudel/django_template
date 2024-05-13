@@ -11,6 +11,7 @@ dependencies = [
     "django-vite>=3.0.4",
     "python-dotenv>=1.0.1",
     "whitenoise>=6.6.0",
+    "django-debug-toolbar>=4.3.0",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"

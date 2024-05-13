@@ -41,6 +41,7 @@ users_paths = [
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
     # add user routes
     path("users/", include((users_paths, "users"), namespace="users")),
 ]
