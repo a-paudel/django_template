@@ -9,9 +9,12 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView as _DjangoPasswordResetConfirmView,
     PasswordResetCompleteView as _DjangoPasswordResetCompleteView,
 )
+from base64 import urlsafe_b64encode
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
 
+from core.tasks import send_email
 from users.forms import LoginForm, PasswordResetForm, PasswordSetForm, RegisterForm
 from users.models import User
 

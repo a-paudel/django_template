@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_celery_results",
     "django_celery_beat",
+    "djcelery_email",
     "core",
     "users",
 ]
@@ -144,6 +145,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
 
 # Email settings
+EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
 EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST")
 EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
