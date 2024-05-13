@@ -8,6 +8,8 @@ x-build: &build
     - DJANGO_REDIS_URL=redis://redis:6379/0
     - DJANGO_DEBUG=false
     - DJANGO_EMAIL_HOST=mailpit
+    - DJANGO_EMAIL_USERNAME=root
+    - DJANGO_EMAIL_USERNAME=pass
     - DJANGO_EMAIL_FROM_ADDRESS=demo@djangoappname.com
     - DJANGO_EMAIL_FROM_NAME="${DJANGO_APP_NAME}"
     - DJANGO_EMAIL_TLS=true
@@ -33,26 +35,28 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - redis_data:/bitnami/redis
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
 
   mailpit:
     image: axllent/mailpit:latest
     ports:
       - "8080:8025"
+    environment:
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
+
   server:
     <<: *build
     ports:
       - "8000:8000"
-  celery-worker:
+  huey-worker:
     <<: *build
-    command: pdm run celery -A config worker -l INFO
-  celery-beat:
-    <<: *build
-    command: pdm run celery -A config beat -l INFO
-  celery-flower:
-    <<: *build
-    command: pdm run celery -A config flower
-    ports:
-      - "5555:5555"
+    command: pdm run python manage.py run_huey
 
 volumes:
   db_data:

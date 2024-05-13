@@ -2,9 +2,7 @@
 name = "django_template"
 version = "0.1.0"
 description = "Default template for PDM package"
-authors = [
-    {name = "Ankur Paudel", email = "ankur@paudel.me"},
-]
+authors = [{ name = "Ankur Paudel", email = "ankur@paudel.me" }]
 dependencies = [
     "django>=5.0.6",
     "jinja2>=3.1.4",
@@ -12,22 +10,19 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "whitenoise>=6.6.0",
     "django-debug-toolbar>=4.3.0",
-    "celery[redis]>=5.4.0",
-    "django-celery-results>=2.5.1",
-    "django-celery-beat>=2.6.0",
-    "flower>=2.0.1",
-    "bs4>=0.0.2",
     "lxml>=5.2.2",
-    "django-celery-email>=3.0.0",
     "faker>=25.1.0",
     "gunicorn>=22.0.0",
     "dj-database-url>=2.1.0",
     "pymysql>=1.1.0",
     "psycopg[binary]>=3.1.19",
+    "huey>=2.5.0",
+    "django-huey-email>=0.0.1",
+    "redis>=5.0.4",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 
 [tool.pdm]

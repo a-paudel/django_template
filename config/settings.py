@@ -16,6 +16,7 @@ import dotenv
 import dj_database_url
 import os
 import pymysql
+from huey import RedisHuey
 
 pymysql.install_as_MySQLdb()
 
@@ -52,9 +53,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_vite",
     "debug_toolbar",
-    "django_celery_results",
-    "django_celery_beat",
-    "djcelery_email",
+    "huey.contrib.djhuey",
+    "huey_email",
     "core",
     "users",
 ]
@@ -152,7 +152,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
 
 # Email settings
-EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
+EMAIL_BACKEND = "huey_email.backends.HueyEmailBackend"
 EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST")
 EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
@@ -160,11 +160,8 @@ EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
 EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
-# Celery settings
-CELERY_BROKER_URL = os.getenv("DJANGO_REDIS_URL")
-CELERY_RESULT_BACKEND = "django-db"
-CELERY_CACHE_BACKEND = "django-cache"
-CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+# Huey settings
+HUEY = RedisHuey(name="huey", url=os.getenv("DJANGO_REDIS_URL", ""))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
