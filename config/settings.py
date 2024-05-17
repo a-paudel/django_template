@@ -16,7 +16,6 @@ import dotenv
 import dj_database_url
 import os
 import pymysql
-from huey import RedisHuey
 
 pymysql.install_as_MySQLdb()
 
@@ -53,8 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_vite",
     "debug_toolbar",
-    "huey.contrib.djhuey",
-    "huey_email",
+    "django_q",
     "core",
     "users",
 ]
@@ -152,7 +150,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
 
 # Email settings
-EMAIL_BACKEND = "huey_email.backends.HueyEmailBackend"
+EMAIL_BACKEND = "django_q_email.backends.DjangoQBackend"
 EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST")
 EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
@@ -160,8 +158,15 @@ EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
 EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
-# Huey settings
-HUEY = RedisHuey(name="huey", url=os.getenv("DJANGO_REDIS_URL", ""))
+# Background tasks settings
+Q_CLUSTER = {
+    "workers": int(os.getenv("DJANGO_TASK_WORKERS", 1)),
+    "max_attempts": 5,
+    # use the orm broker
+    "orm": "default",
+    # how often to check for new tasks (in seconds)
+    "poll": 2,
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

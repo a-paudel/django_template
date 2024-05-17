@@ -28,20 +28,6 @@ services:
       test: ["CMD", "mariadb-admin", "-ppass", "ping"]
       timeout: 3s
       retries: 10
-
-  redis:
-    image: bitnami/redis:latest
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    volumes:
-      - redis_data:/bitnami/redis
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    ports:
-      - "8081:8081"
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-
   mailpit:
     image: axllent/mailpit:latest
     ports:
@@ -54,9 +40,9 @@ services:
     <<: *build
     ports:
       - "8000:8000"
-  huey-worker:
+  task-worker:
     <<: *build
-    command: pdm run python manage.py run_huey
+    command: pdm run python manage.py qcluster
 
 volumes:
   db_data:
