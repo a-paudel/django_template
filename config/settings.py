@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_vite",
     "debug_toolbar",
-    "django_q",
+    "django_rq",
+    "django_rq_email_backend",
     "core",
     "users",
 ]
@@ -150,7 +151,7 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
 
 # Email settings
-EMAIL_BACKEND = "django_q_email.backends.DjangoQBackend"
+EMAIL_BACKEND = "django_rq_email_backend.backends.RQEmailBackend"
 EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST")
 EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
@@ -159,13 +160,10 @@ EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
 # Background tasks settings
-Q_CLUSTER = {
-    "workers": int(os.getenv("DJANGO_TASK_WORKERS", 1)),
-    "max_attempts": 5,
-    # use the orm broker
-    "orm": "default",
-    # how often to check for new tasks (in seconds)
-    "poll": 2,
+RQ_QUEUES = {
+    "default": {
+        "URL": os.getenv("DJANGO_REDIS_URL"),
+    }
 }
 
 # Default primary key field type

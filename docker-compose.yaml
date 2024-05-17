@@ -28,6 +28,10 @@ services:
       test: ["CMD", "mariadb-admin", "-ppass", "ping"]
       timeout: 3s
       retries: 10
+  redis:
+    image: bitnami/redis:latest
+    volumes:
+      - redis_data:/bitnami/redis
   mailpit:
     image: axllent/mailpit:latest
     ports:
@@ -42,7 +46,7 @@ services:
       - "8000:8000"
   task-worker:
     <<: *build
-    command: pdm run python manage.py qcluster
+    command: pdm run python manage.py rqworker default
 
 volumes:
   db_data:

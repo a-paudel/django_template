@@ -42,6 +42,7 @@ users_paths = [
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("rq/", include("django_rq.urls")),
     # add user routes
     path("users/", include((users_paths, "users"), namespace="users")),
 ]

@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"python manage.py runserver\" \"python manage.py qcluster\"",
+    "dev": "concurrently \"vite\" \"python manage.py runserver\" \"python manage.py rqworker default\"",
     "build": "vite build"
   },
   "dependencies": {
