@@ -11,6 +11,8 @@ RUN bun run build
 FROM python:3.12-alpine as final
 WORKDIR /app
 
+RUN apk add --no-cache curl
+
 RUN pip install pdm
 
 COPY pdm.lock pyproject.toml ./
