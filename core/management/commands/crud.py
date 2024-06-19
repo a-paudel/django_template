@@ -47,7 +47,7 @@ class Command(BaseCommand):
         else:
             # add model to models file
             model_class_text = dedent(f"""
-            class {model}(models.Model):
+            class {model}(BaseModel):
                 '''Model definition for {model}.'''
 
                 class Meta:
