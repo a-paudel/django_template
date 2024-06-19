@@ -38,7 +38,7 @@ class Command(BaseCommand):
         for import_line in models_import_lines:
             models_file_text = model_file.read_text()
             if import_line not in models_file_text:
-                model_file.write_text(f"{import_line}\n\n" + models_file_text)
+                model_file.write_text(f"{import_line}\n" + models_file_text)
 
         # check if model already exists
         models_file_text = model_file.read_text()
