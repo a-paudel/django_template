@@ -7,7 +7,7 @@ export default defineConfig({
         outDir: "./public",
         rollupOptions: {
             input: [
-                "resources/js/app.js",
+                "resources/js/app.ts",
             ]
         }
     }
