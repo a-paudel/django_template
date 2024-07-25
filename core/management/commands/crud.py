@@ -69,7 +69,7 @@ class Command(BaseCommand):
             "template_delete": Path(__file__).parent / "stubs" / "templates" / "delete.html.jinja2",
             "template_table_partial": Path(__file__).parent / "stubs" / "templates" / "table_partial.html.jinja2",
         }
-        files_to_create = {
+        files_to_create: dict[str, Path] = {
             "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
             "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
             "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
@@ -168,7 +168,7 @@ class Command(BaseCommand):
         )
         files_to_create["urls"].write_text(urls_content)
         # urls init file
-        urls_import_text = f"\nfrom .{model_name_lower}s import {model_name}_url_patterns\n"
+        urls_import_text = f"\nfrom .{model_name_lower}s import {model_name_lower}_url_patterns\n"
         urls_init_file_content = init_files["urls"].read_text()
         if urls_import_text not in urls_init_file_content:
             init_files["urls"].write_text(urls_import_text + urls_init_file_content)
@@ -180,7 +180,12 @@ class Command(BaseCommand):
             template_content = template.render(
                 app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
             )
-            files_to_create[template_name].write_text(template_content)
+            template_file = files_to_create[template_name]
+            is_layout_file = template_name == "template_layout"
+            if is_layout_file and template_file.exists() and "block main" in template_file.read_text():
+                # dont overwrite the layout file if it already has a block main
+                continue
+            template_file.write_text(template_content)
 
         print(f"Created CRUD files for {app_name}.{model_name}")
         print("Don't forget to add the urls to the main urls.py file")
