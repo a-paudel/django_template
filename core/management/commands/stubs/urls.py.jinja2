@@ -8,7 +8,7 @@ from {{app_name}}.views.{{model_name_lower}}s import (
     {{model_name}}DeleteView,
 )
 
-{{model_name}}_url_patterns = [
+{{model_name_lower}}_url_patterns = [
     path("", {{model_name}}ListView.as_view(), name="list"),
     path("create/", {{model_name}}CreateView.as_view(), name="create"),
     path("<int:pk>/", {{model_name}}DetailView.as_view(), name="detail"),

@@ -1,7 +1,6 @@
 from pathlib import Path
-from textwrap import dedent
 from typing import Any
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import BaseCommand
 from django.conf import settings
 from jinja2 import Template
 
@@ -34,7 +33,7 @@ class Command(BaseCommand):
             if app in valid_apps:
                 return app
 
-            print(f"Invalid app name. Valid apps are: {valid_apps}")
+            print(f"Invalid app name. Check if app is present in INSTALLED_APPS. Valid apps are: {valid_apps}")
 
     def get_model(self) -> str:
         while True:
@@ -183,3 +182,6 @@ class Command(BaseCommand):
                 app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
             )
             files_to_create[template_name].write_text(template_content)
+
+        print(f"Create CRUD files for {app_name}.{model_name}")
+        print("Don't forget to add the urls to the main urls.py file")
