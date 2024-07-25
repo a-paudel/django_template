@@ -54,11 +54,13 @@ class Command(BaseCommand):
             "models": base_dir / app_name / "models" / "__init__.py",
             "forms": base_dir / app_name / "forms" / "__init__.py",
             "views": base_dir / app_name / "views" / "__init__.py",
+            "urls": base_dir / app_name / "urls" / "__init__.py",
         }
         file_stubs = {
             "models": Path(__file__).parent / "stubs" / "models.py.jinja2",
             "forms": Path(__file__).parent / "stubs" / "forms.py.jinja2",
             "views": Path(__file__).parent / "stubs" / "views.py.jinja2",
+            "urls": Path(__file__).parent / "stubs" / "urls.py.jinja2",
             "template_layout": Path(__file__).parent / "stubs" / "templates" / "layout.html.jinja2",
             "template_list": Path(__file__).parent / "stubs" / "templates" / "list.html.jinja2",
             "template_detail": Path(__file__).parent / "stubs" / "templates" / "detail.html.jinja2",
@@ -70,6 +72,7 @@ class Command(BaseCommand):
             "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
             "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
             "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
+            "urls": base_dir / app_name / "urls" / f"{model_name_lower}s.py",
             "template_layout": base_dir / "jinja" / "layouts" / f"{app_name}.html",
             "template_list": base_dir / "jinja" / app_name / (model_name_lower + "s") / "list.html",
             "template_detail": base_dir / "jinja" / app_name / (model_name_lower + "s") / "detail.html",
@@ -159,6 +162,18 @@ class Command(BaseCommand):
         views_init_file_content = init_files["views"].read_text()
         if views_import_text not in views_init_file_content:
             init_files["views"].write_text(views_import_text + views_init_file_content)
+
+        # create the urls file
+        urls_template = Template(file_stubs["urls"].read_text())
+        urls_content = urls_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["urls"].write_text(urls_content)
+        # urls init file
+        urls_import_text = f"\nfrom .{model_name_lower}s import {model_name}_url_patterns\n"
+        urls_init_file_content = init_files["urls"].read_text()
+        if urls_import_text not in urls_init_file_content:
+            init_files["urls"].write_text(urls_import_text + urls_init_file_content)
 
         # create the templates
         template_names = [name for name in files_to_create.keys() if name.startswith("template_")]

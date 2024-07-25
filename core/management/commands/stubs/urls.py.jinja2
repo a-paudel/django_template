@@ -1,0 +1,17 @@
+from django.urls import path, include
+from {{app_name}}.models import {{model_name}}
+from {{app_name}}.views.{{model_name_lower}}s import (
+    {{model_name}}ListView,
+    {{model_name}}CreateView,
+    {{model_name}}DetailView,
+    {{model_name}}UpdateView,
+    {{model_name}}DeleteView,
+)
+
+{{model_name}}_url_patterns = [
+    path("", {{model_name}}ListView.as_view(), name="list"),
+    path("create/", {{model_name}}CreateView.as_view(), name="create"),
+    path("<int:pk>/", {{model_name}}DetailView.as_view(), name="detail"),
+    path("<int:pk>/update/", {{model_name}}UpdateView.as_view(), name="update"),
+    path("<int:pk>/delete/", {{model_name}}DeleteView.as_view(), name="delete"),
+]
