@@ -55,18 +55,37 @@ class Command(BaseCommand):
             "forms": base_dir / app_name / "forms" / "__init__.py",
             "views": base_dir / app_name / "views" / "__init__.py",
         }
-
-        for file in init_files.values():
-            file.parent.mkdir(parents=True, exist_ok=True)
-            if not file.exists():
-                file.touch()
-
-        # define the stubs
         file_stubs = {
             "models": Path(__file__).parent / "stubs" / "models.py.jinja2",
             "forms": Path(__file__).parent / "stubs" / "forms.py.jinja2",
             "views": Path(__file__).parent / "stubs" / "views.py.jinja2",
+            "template_layout": Path(__file__).parent / "stubs" / "templates" / "layout.html.jinja2",
+            "template_list": Path(__file__).parent / "stubs" / "templates" / "list.html.jinja2",
+            "template_detail": Path(__file__).parent / "stubs" / "templates" / "detail.html.jinja2",
+            "template_form": Path(__file__).parent / "stubs" / "templates" / "form.html.jinja2",
+            "template_delete": Path(__file__).parent / "stubs" / "templates" / "delete.html.jinja2",
+            "template_table_partial": Path(__file__).parent / "stubs" / "templates" / "table_partial.html.jinja2",
         }
+        files_to_create = {
+            "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
+            "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
+            "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
+            "template_layout": base_dir / "jinja" / "layouts" / f"{app_name}.html",
+            "template_list": base_dir / "jinja" / app_name / (model_name_lower + "s") / "list.html",
+            "template_detail": base_dir / "jinja" / app_name / (model_name_lower + "s") / "detail.html",
+            "template_form": base_dir / "jinja" / app_name / (model_name_lower + "s") / "form.html",
+            "template_delete": base_dir / "jinja" / app_name / (model_name_lower + "s") / "delete.html",
+            "template_table_partial": base_dir
+            / "jinja"
+            / app_name
+            / (model_name_lower + "s")
+            / "partials"
+            / "table.html",
+        }
+
+        # create the folders
+        for file in list(init_files.values()) + list(files_to_create.values()):
+            file.parent.mkdir(parents=True, exist_ok=True)
 
         # delete existing files
         files_to_delete = [
@@ -81,13 +100,6 @@ class Command(BaseCommand):
                     print(f"File {file} is not empty. Please move the classes to the module and delete file manually.")
                 else:
                     file.unlink()
-
-        # create the files
-        files_to_create = {
-            "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
-            "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
-            "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
-        }
 
         existing_files = []
         for file in files_to_create.values():
@@ -108,13 +120,17 @@ class Command(BaseCommand):
                     return
                 break
 
+        # touch all files
+        for file in list(init_files.values()) + list(files_to_create.values()):
+            file.touch()
+
         # create the models file
         models_template = Template(file_stubs["models"].read_text())
         models_content = models_template.render(
             app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
         )
         files_to_create["models"].write_text(models_content)
-        # add imports to __init__.py
+        # models init file
         models_import_text = f"\nfrom .{model_name_lower}s import {model_name}\n"
         models_init_file_content = init_files["models"].read_text()
         if models_import_text not in models_init_file_content:
@@ -126,7 +142,7 @@ class Command(BaseCommand):
             app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
         )
         files_to_create["forms"].write_text(forms_content)
-        # add imports to __init__.py
+        # forms init file
         forms_import_text = f"\nfrom .{model_name_lower}s import {model_name}CreateForm, {model_name}UpdateForm\n"
         forms_init_file_content = init_files["forms"].read_text()
         if forms_import_text not in forms_init_file_content:
@@ -138,8 +154,17 @@ class Command(BaseCommand):
             app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
         )
         files_to_create["views"].write_text(views_content)
-        # add imports to __init__.py
+        # views init file
         views_import_text = f"\nfrom .{model_name_lower}s import {model_name}ListView, {model_name}CreateView, {model_name}DetailView, {model_name}UpdateView, {model_name}DeleteView\n"
         views_init_file_content = init_files["views"].read_text()
         if views_import_text not in views_init_file_content:
             init_files["views"].write_text(views_import_text + views_init_file_content)
+
+        # create the templates
+        template_names = [name for name in files_to_create.keys() if name.startswith("template_")]
+        for template_name in template_names:
+            template = Template(file_stubs[template_name].read_text())
+            template_content = template.render(
+                app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+            )
+            files_to_create[template_name].write_text(template_content)

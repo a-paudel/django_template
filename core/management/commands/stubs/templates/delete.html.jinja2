@@ -1,0 +1,19 @@
+{{'{%'}} extends 'layouts/{{app_name}}.html' {{'%}'}}
+{{'{%'}} block main {{'%}'}}
+    <div class="prose">
+        <h1>Delete {{model_name}}</h1>
+    </div>
+
+    <form action="{{'{{'}} url("{{model_name_lower}}s:delete", pk={{model_name_lower}}.pk) {{'}}'}}" method="post">
+        {{'{{'}} csrf_input {{'}}'}}
+        <div class="text-center">
+            <h1 class="text-xl font-bold">Are you sure you want to delete this {{model_name_lower}}?</h1>
+        </div>
+
+        <div class="flex gap-4 mt-4">
+            <a href="{{'{{'}} cancel_url {{'}}'}}" class="btn grow">Cancel</a>
+            <button type="submit" class="btn btn-primary grow">{{'{{'}} submit_text {{'}}'}}</button>
+        </div>
+    </form>
+{{'{%'}} endblock main {{'%}'}}
+

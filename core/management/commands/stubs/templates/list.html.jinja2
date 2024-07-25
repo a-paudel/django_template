@@ -1,0 +1,19 @@
+{{'{%'}} extends 'layouts/{{ app_name }}.html' {{'%}'}}
+
+{{'{%'}} block main {{'%}'}}
+<div class="prose">
+    <h1>{{ model_name }} List</h1>
+</div>
+
+{{'{#'}} create button {{'#}'}}
+<div class="flex justify-end mt-4">
+    <a href="{{'{{'}} url("{{ model_name_lower }}s:create") {{'}}'}}" class="rounded-b-none btn btn-primary">Create {{ model_name }}</a>
+</div>
+
+{{'{#'}} table {{'#}'}}
+<div>
+    {{'{%'}} with hover=True, paginate=True {{'%}'}}
+    {{'{%'}} include '{{ app_name }}/{{ model_name_lower }}s/partials/table.html' {{'%}'}}
+    {{'{%'}} endwith {{'%}'}}
+</div>
+{{'{%'}} endblock main {{'%}'}}
