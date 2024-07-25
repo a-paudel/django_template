@@ -65,6 +65,7 @@ class Command(BaseCommand):
         file_stubs = {
             "models": Path(__file__).parent / "stubs" / "models.py.jinja2",
             "forms": Path(__file__).parent / "stubs" / "forms.py.jinja2",
+            "views": Path(__file__).parent / "stubs" / "views.py.jinja2",
         }
 
         # delete existing files
@@ -85,6 +86,7 @@ class Command(BaseCommand):
         files_to_create = {
             "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
             "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
+            "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
         }
 
         existing_files = []
@@ -108,7 +110,9 @@ class Command(BaseCommand):
 
         # create the models file
         models_template = Template(file_stubs["models"].read_text())
-        models_content = models_template.render(model_name=model_name)
+        models_content = models_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
         files_to_create["models"].write_text(models_content)
         # add imports to __init__.py
         models_import_text = f"\nfrom .{model_name_lower}s import {model_name}\n"
@@ -118,10 +122,24 @@ class Command(BaseCommand):
 
         # create the forms file
         forms_template = Template(file_stubs["forms"].read_text())
-        forms_content = forms_template.render(app_name=app_name, model_name=model_name)
+        forms_content = forms_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
         files_to_create["forms"].write_text(forms_content)
         # add imports to __init__.py
         forms_import_text = f"\nfrom .{model_name_lower}s import {model_name}CreateForm, {model_name}UpdateForm\n"
         forms_init_file_content = init_files["forms"].read_text()
         if forms_import_text not in forms_init_file_content:
             init_files["forms"].write_text(forms_import_text + forms_init_file_content)
+
+        # create the views file
+        views_template = Template(file_stubs["views"].read_text())
+        views_content = views_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["views"].write_text(views_content)
+        # add imports to __init__.py
+        views_import_text = f"\nfrom .{model_name_lower}s import {model_name}ListView, {model_name}CreateView, {model_name}DetailView, {model_name}UpdateView, {model_name}DeleteView\n"
+        views_init_file_content = init_files["views"].read_text()
+        if views_import_text not in views_init_file_content:
+            init_files["views"].write_text(views_import_text + views_init_file_content)
