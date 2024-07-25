@@ -1,0 +1,44 @@
+from typing import cast
+from django.urls import reverse
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from {{app_name}}.models.{{model_name_lower}}s import {{model_name}}
+from {{app_name}}.forms.{{model_name_lower}}s import {{model_name}}CreateForm, {{model_name}}UpdateForm
+
+
+class {{model_name}}ListView(ListView):
+    model = {{model_name}}
+    template_name = "{{app_name}}/{{model_name_lower}}s/list.html"
+    paginate_by = 10
+
+
+class {{model_name}}CreateView(CreateView):
+    model = {{model_name}}
+    template_name = "{{app_name}}/{{model_name_lower}}s/form.html"
+    form_class = {{model_name}}CreateForm
+
+    def get_success_url(self) -> str:
+        obj = cast({{model_name}}, self.object)  # type: ignore
+        return reverse("{{model_name_lower}}s:detail", kwargs={"pk": obj.pk})
+
+
+class {{model_name}}DetailView(DetailView):
+    model = {{model_name}}
+    template_name = "{{app_name}}/{{model_name_lower}}s/detail.html"
+
+
+class {{model_name}}UpdateView(UpdateView):
+    model = {{model_name}}
+    template_name = "{{app_name}}/{{model_name_lower}}s/form.html"
+    form_class = {{model_name}}UpdateForm
+
+    def get_success_url(self) -> str:
+        obj = cast({{model_name}}, self.object)  # type: ignore
+        return reverse("{{model_name_lower}}s:detail", kwargs={"pk": obj.pk})
+
+
+class {{model_name}}DeleteView(DeleteView):
+    model = {{model_name}}
+    template_name = "{{app_name}}/{{model_name_lower}}s/delete.html"
+
+    def get_success_url(self) -> str:
+        return reverse("{{model_name_lower}}s:list")

@@ -1,0 +1,12 @@
+{{'{%'}} extends 'layouts/{{ app_name }}.html' {{'%}'}}
+{{'{%'}} block main {{'%}'}}
+<div class="prose">
+    <h1>{{ model_name }} Details</h1>
+</div>
+
+<div>
+    {{'{%'}} with edit=True, delete=True {{'%}'}}
+    {{'{%'}} include '{{ app_name }}/{{ model_name_lower }}s/partials/table.html' {{'%}'}}
+    {{'{%'}} endwith {{'%}'}}
+</div>
+{{'{%'}} endblock main {{'%}'}}

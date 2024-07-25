@@ -1,320 +1,186 @@
 from pathlib import Path
-from textwrap import dedent
 from typing import Any
-from django.core.management.base import BaseCommand, CommandParser
+from django.core.management.base import BaseCommand
+from django.conf import settings
+from jinja2 import Template
+import inquirer
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser: CommandParser) -> None:
-        parser.add_argument("model", type=str, help="Name of the model to create in app.Model foramt")
+    def get_input(self):
+        app_names = [
+            a
+            for a in settings.INSTALLED_APPS
+            if a
+            not in [
+                "django.contrib.admin",
+                "django.contrib.auth",
+                "django.contrib.contenttypes",
+                "django.contrib.sessions",
+                "django.contrib.messages",
+                "whitenoise.runserver_nostatic",
+                "django.contrib.staticfiles",
+                "django_vite",
+                "debug_toolbar",
+                "django_rq",
+                "django_rq_email_backend",
+                "core",
+                "users",
+            ]
+        ]
+
+        if not app_names:
+            print("No valid apps found. Check the INSTALLED_APPS setting.")
+            return
+        questions = [
+            inquirer.List("app_name", message="Select the app", choices=app_names),
+            inquirer.Text("model_name", message="Enter the model name"),
+        ]
+        answers = inquirer.prompt(questions)
+        return answers
 
     def handle(self, *args: Any, **options: Any) -> str | None:
-        model_input = options["model"]
-        if "." not in model_input:
-            return "Model name should be in app.Model format"
-        model_parts = model_input.split(".")
-        if len(model_parts) != 2:
-            return "Model name should be in app.Model format"
-        app = model_parts[0].lower()
-        model = model_parts[1].title()
+        answers = self.get_input()
+        if not answers:
+            return
+        app_name = answers["app_name"]
+        model_name = answers["model_name"]
+        model_name = model_name.replace(" ", "")
+        model_name_lower = model_name.lower()
 
-        app_init_file = Path(".") / app / "__init__.py"
-        if not app_init_file.exists():
-            return f"App {app} does not exist"
+        base_dir: Path = settings.BASE_DIR
 
-        self.create_model(app, model)
-        self.create_forms(app, model)
-        self.create_views(app, model)
-        self.create_templates(app, model)
+        # create the folders
+        init_files = {
+            "models": base_dir / app_name / "models" / "__init__.py",
+            "forms": base_dir / app_name / "forms" / "__init__.py",
+            "views": base_dir / app_name / "views" / "__init__.py",
+            "urls": base_dir / app_name / "urls" / "__init__.py",
+        }
+        file_stubs = {
+            "models": Path(__file__).parent / "stubs" / "models.py.jinja2",
+            "forms": Path(__file__).parent / "stubs" / "forms.py.jinja2",
+            "views": Path(__file__).parent / "stubs" / "views.py.jinja2",
+            "urls": Path(__file__).parent / "stubs" / "urls.py.jinja2",
+            "template_layout": Path(__file__).parent / "stubs" / "templates" / "layout.html.jinja2",
+            "template_list": Path(__file__).parent / "stubs" / "templates" / "list.html.jinja2",
+            "template_detail": Path(__file__).parent / "stubs" / "templates" / "detail.html.jinja2",
+            "template_form": Path(__file__).parent / "stubs" / "templates" / "form.html.jinja2",
+            "template_delete": Path(__file__).parent / "stubs" / "templates" / "delete.html.jinja2",
+            "template_table_partial": Path(__file__).parent / "stubs" / "templates" / "table_partial.html.jinja2",
+        }
+        files_to_create = {
+            "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
+            "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
+            "views": base_dir / app_name / "views" / f"{model_name_lower}s.py",
+            "urls": base_dir / app_name / "urls" / f"{model_name_lower}s.py",
+            "template_layout": base_dir / "jinja" / "layouts" / f"{app_name}.html",
+            "template_list": base_dir / "jinja" / app_name / (model_name_lower + "s") / "list.html",
+            "template_detail": base_dir / "jinja" / app_name / (model_name_lower + "s") / "detail.html",
+            "template_form": base_dir / "jinja" / app_name / (model_name_lower + "s") / "form.html",
+            "template_delete": base_dir / "jinja" / app_name / (model_name_lower + "s") / "delete.html",
+            "template_table_partial": base_dir
+            / "jinja"
+            / app_name
+            / (model_name_lower + "s")
+            / "partials"
+            / "table.html",
+        }
 
-    def create_model(self, app: str, model: str):
-        # create models file if not exists
-        model_file = Path(".") / app / "models.py"
-        if not model_file.exists():
-            model_file.write_text("")
+        # create the folders
+        for file in list(init_files.values()) + list(files_to_create.values()):
+            file.parent.mkdir(parents=True, exist_ok=True)
 
-        # check if file has imports
-        models_import_lines = ["from django.db import models", "from core.models import BaseModel"]
-        for import_line in models_import_lines:
-            models_file_text = model_file.read_text()
-            if import_line not in models_file_text:
-                model_file.write_text(f"{import_line}\n" + models_file_text)
-
-        # check if model already exists
-        models_file_text = model_file.read_text()
-        if f"class {model}" in models_file_text:
-            print(f"Model {model} already exists")
-        else:
-            # add model to models file
-            model_class_text = dedent(f"""
-            class {model}(BaseModel):
-                '''Model definition for {model}.'''
-
-                class Meta:
-                    '''Meta definition for {model}.'''
-
-                    verbose_name = '{model}'
-                    verbose_name_plural = '{model}s'
-
-                def __str__(self):
-                    pass
-            """)
-            model_file.write_text(models_file_text + model_class_text)
-
-    def create_forms(self, app: str, model: str):
-        forms_init_file = Path(".") / app / "forms" / "__init__.py"
-        if not forms_init_file.exists():
-            forms_init_file.parent.mkdir(parents=True, exist_ok=True)
-            forms_init_file.write_text("")
-
-        form_file = Path(".") / app / "forms" / f"{model.lower()}.py"
-        if not form_file.exists():
-            form_file.write_text("")
-
-        import_lines = [
-            "from django import forms",
-            "from core.forms import BaseForm",
-            f"from {app}.models import {model}",
+        # delete existing files
+        files_to_delete = [
+            base_dir / app_name / "models.py",
+            base_dir / app_name / "views.py",
+            base_dir / app_name / "forms.py",
         ]
-        for import_line in import_lines:
-            text = form_file.read_text()
-            if import_line not in text:
-                form_file.write_text(f"{import_line}\n" + text)
+        for file in files_to_delete:
+            if file.exists():
+                content = file.read_text()
+                if "class" in content:
+                    print(f"File {file} is not empty. Please move the classes to the module and delete file manually.")
+                else:
+                    file.unlink()
 
-        # check if forms already exist
-        form_file_text = form_file.read_text()
-        # create form
-        if f"class {model}CreateForm" in form_file_text:
-            print(f"{model}CreateForm already exists")
-        else:
-            create_form_text = dedent(f"""
-                class {model}CreateForm(BaseForm, forms.ModelForm):
-                    class Meta:
-                        model = {model}
-                        fields = "__all__"
-                """)
-            form_file.write_text(form_file_text + create_form_text)
+        existing_files = []
+        for file in files_to_create.values():
+            if file.exists():
+                existing_files.append(file)
 
-        # check if forms already exist
-        form_file_text = form_file.read_text()
-        # create form
-        if f"class {model}UpdateForm" in form_file_text:
-            print(f"{model}UpdateForm already exists")
-        else:
-            update_form_text = dedent(f"""
-                class {model}UpdateForm(BaseForm, forms.ModelForm):
-                    class Meta:
-                        model = {model}
-                        fields = "__all__"
-                """)
-            form_file.write_text(form_file_text + update_form_text)
+        if existing_files:
+            print("The following files already exist:")
+            for file in existing_files:
+                print(file)
+            answers = inquirer.prompt([inquirer.Confirm("overwrite", message="Do you want to overwrite them?")])
+            if not answers:
+                return
+            overwrite = answers["overwrite"]
+            if not overwrite:
+                return
 
-    def create_views(self, app: str, model: str):
-        views_init_file = Path(".") / app / "views" / "__init__.py"
-        if not views_init_file.exists():
-            views_init_file.parent.mkdir(parents=True, exist_ok=True)
-            views_init_file.write_text("")
+        # touch all files
+        for file in list(init_files.values()) + list(files_to_create.values()):
+            file.touch()
 
-        view_file = Path(".") / app / "views" / f"{model.lower()}.py"
-        if not view_file.exists():
-            view_file.write_text("")
+        # create the models file
+        models_template = Template(file_stubs["models"].read_text())
+        models_content = models_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["models"].write_text(models_content)
+        # models init file
+        models_import_text = f"\nfrom .{model_name_lower}s import {model_name}\n"
+        models_init_file_content = init_files["models"].read_text()
+        if models_import_text not in models_init_file_content:
+            init_files["models"].write_text(models_import_text + models_init_file_content)
 
-        import_lines = [
-            "from typing import Any",
-            "from django.db.models.query import QuerySet",
-            "from django.urls import reverse",
-            "from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView",
-            f"from {app}.models import {model}",
-            f"from {app}.forms.{model.lower()} import {model}CreateForm, {model}UpdateForm",
-        ]
-        for import_line in import_lines:
-            text = view_file.read_text()
-            if import_line not in text:
-                view_file.write_text(f"{import_line}\n" + text)
+        # create the forms file
+        forms_template = Template(file_stubs["forms"].read_text())
+        forms_content = forms_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["forms"].write_text(forms_content)
+        # forms init file
+        forms_import_text = f"\nfrom .{model_name_lower}s import {model_name}CreateForm, {model_name}UpdateForm\n"
+        forms_init_file_content = init_files["forms"].read_text()
+        if forms_import_text not in forms_init_file_content:
+            init_files["forms"].write_text(forms_import_text + forms_init_file_content)
 
-        # list view
-        view_file_text = view_file.read_text()
-        if f"class {model}ListView(ListView):" in view_file_text:
-            print("ListView already exists")
-        else:
-            view_file.write_text(
-                view_file_text
-                + dedent(f"""
-            class {model}ListView(ListView):
-                model = {model}
-                template_name = "{model.lower()}s/list.html"
-                paginate_by = 10
+        # create the views file
+        views_template = Template(file_stubs["views"].read_text())
+        views_content = views_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["views"].write_text(views_content)
+        # views init file
+        views_import_text = f"\nfrom .{model_name_lower}s import {model_name}ListView, {model_name}CreateView, {model_name}DetailView, {model_name}UpdateView, {model_name}DeleteView\n"
+        views_init_file_content = init_files["views"].read_text()
+        if views_import_text not in views_init_file_content:
+            init_files["views"].write_text(views_import_text + views_init_file_content)
 
-            """)
+        # create the urls file
+        urls_template = Template(file_stubs["urls"].read_text())
+        urls_content = urls_template.render(
+            app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
+        )
+        files_to_create["urls"].write_text(urls_content)
+        # urls init file
+        urls_import_text = f"\nfrom .{model_name_lower}s import {model_name}_url_patterns\n"
+        urls_init_file_content = init_files["urls"].read_text()
+        if urls_import_text not in urls_init_file_content:
+            init_files["urls"].write_text(urls_import_text + urls_init_file_content)
+
+        # create the templates
+        template_names = [name for name in files_to_create.keys() if name.startswith("template_")]
+        for template_name in template_names:
+            template = Template(file_stubs[template_name].read_text())
+            template_content = template.render(
+                app_name=app_name, model_name=model_name, model_name_lower=model_name_lower
             )
-        # create view
-        view_file_text = view_file.read_text()
-        if f"class {model}CreateView(CreateView):" in view_file_text:
-            print("CreateView already exists")
-        else:
-            view_file.write_text(
-                view_file_text
-                + dedent(f"""
-            class {model}CreateView(CreateView):
-                model = {model}
-                template_name = "{model.lower()}s/form.html"
-                form_class = {model}CreateForm
+            files_to_create[template_name].write_text(template_content)
 
-                def get_success_url(self) -> str:
-                    return reverse("todos:detail", kwargs={{"pk": self.object.pk}})  # type: ignore
-            """)
-            )
-        # detail view
-        view_file_text = view_file.read_text()
-        if f"class {model}DetailView(DetailView):" in view_file_text:
-            print("DetailView already exists")
-        else:
-            view_file.write_text(
-                view_file_text
-                + dedent(f"""
-            class {model}DetailView(DetailView):
-                model = {model}
-                template_name = "{model.lower()}s/detail.html"
-            """)
-            )
-        # update view
-        view_file_text = view_file.read_text()
-        if f"class {model}UpdateView(UpdateView):" in view_file_text:
-            print("UpdateView already exists")
-        else:
-            view_file.write_text(
-                view_file_text
-                + dedent(f"""
-            class {model}UpdateView(UpdateView):
-                model = {model}
-                template_name = "{model.lower()}s/form.html"
-                form_class = {model}UpdateForm
-
-                def get_success_url(self) -> str:
-                    return reverse("todos:detail", kwargs={{"pk": self.object.pk}})  # type: ignore
-            """)
-            )
-        # delete view
-        view_file_text = view_file.read_text()
-        if f"class {model}DeleteView(DeleteView):" in view_file_text:
-            print("DeleteView already exists")
-        else:
-            view_file.write_text(
-                view_file_text
-                + dedent(f"""
-            class {model}DeleteView(DeleteView):
-                model = {model}
-                template_name = "{model.lower()}s/delete.html"
-
-                def get_success_url(self) -> str:
-                    return reverse("todos:list")
-            """)
-            )
-
-    def create_templates(self, app: str, model: str):
-        template_dir = Path(".") / "jinja" / (model.lower() + "s")
-        template_dir.mkdir(parents=True, exist_ok=True)
-
-        # base tempalte
-        base_template_file = template_dir.parent / "layouts" / (model.lower() + "s.html")
-        if not base_template_file.exists():
-            base_template_file.write_text((base_template_file.parent / "app.html").read_text())
-
-        # list template
-        list_template_file = template_dir / "list.html"
-        if list_template_file.exists():
-            print("List template already exists")
-        else:
-            list_template_file.write_text(
-                dedent(f"""
-                        {{% extends 'layouts/{model.lower()}s.html' %}}
-
-                        {{% block title %}}
-                        {model}s
-                        {{% endblock title %}}
-
-                        {{% block main %}}
-                            {{% for {model.lower()} in {model.lower()}_list %}}
-                                {{{{{model.lower()}}}}}
-                            {{% endfor %}}
-                        {{% endblock main %}}
-                        """)
-            )
-        # form template
-        form_template_file = template_dir / "form.html"
-        if form_template_file.exists():
-            print("Form template already exists")
-        else:
-            form_template_file.write_text(
-                dedent(f"""
-                        {{% extends 'layouts/{model.lower()}s.html' %}}
-
-                        {{% set action_url = url("{model.lower()}s:update", pk={model.lower()}.pk) if {model.lower()} else url("{model.lower()}s:create") %}}
-                        {{% set cancel_url = url("{model.lower()}s:detail", pk={model.lower()}.pk) if {model.lower()} else url("{model.lower()}s:list") %}}
-                        {{% set title = "Update {model}" if {model.lower()} else "Create {model}" %}}
-
-                        {{% block title %}}                        
-                            {{{{title}}}}
-                        {{% endblock title %}}
-
-                        {{% block main %}} 
-                            <form action="{{{{ action_url }}}}" method="post" class="flex flex-col gap-4">
-                                {{{{ csrf_input }}}}
-                                {{{{ form.as_div() }}}}
-
-                                <div class="flex gap-2">
-                                    <a href="{{{{ cancel_url }}}}" class="flex-1 btn">Cancel</a>
-                                    <button type="submit" class="flex-1 btn btn-primary">Save</button>
-                                </div>
-                            </form>
-                        {{% endblock main %}}
-                        """)
-            )
-
-        # detail template
-        detail_template_file = template_dir / "detail.html"
-        if detail_template_file.exists():
-            print("detail template already exists")
-        else:
-            detail_template_file.write_text(
-                dedent(f"""
-                        {{% extends 'layouts/{model.lower()}s.html' %}}
-
-                        {{% block title %}}
-                        {model} Detail
-                        {{% endblock title %}}
-
-                        {{% block main %}}
-                            {{{{{model.lower()}}}}}
-                        {{% endblock main %}}
-                        """)
-            )
-
-        # delete template
-        delete_template_file = template_dir / "delete.html"
-        if delete_template_file.exists():
-            print("delete template already exists")
-        else:
-            delete_template_file.write_text(
-                dedent(f"""
-                        {{% extends 'layouts/{model.lower()}s.html' %}}
-
-                        {{% block title %}}
-                        Delete {model}
-                        {{% endblock title %}}
-
-                        {{% block main %}}
-                            <form method="post" class="flex flex-col gap-4">
-                                {{{{ csrf_input }}}}
-                                <div class="prose text-center max-w-none">
-                                <h1>Are you sure you want to delete this todo?</h1>
-                                </div>
-
-                                <div class="flex gap-2">
-                                    <a href="{{{{ url("{model.lower()}s:list") }}}}" class="flex-1 btn">Cancel</a>
-                                    <button type="submit" class="flex-1 btn btn-primary">Save</button>
-                                </div>
-                            </form>
-                        {{% endblock main %}}
-                        """)
-            )
+        print(f"Created CRUD files for {app_name}.{model_name}")
+        print("Don't forget to add the urls to the main urls.py file")
