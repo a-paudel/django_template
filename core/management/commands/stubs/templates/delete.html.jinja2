@@ -4,14 +4,14 @@
     <h1>Delete {{ model_name }}</h1>
 </div>
 
-<form action="{{'{{'}} url("{{ model_name_lower }}s:delete", pk={{ model_name_lower }}.pk) {{'}}'}}" method="post">
+<form action="{{'{{'}} url("{{ model_name_lower }}s:delete", pk={{ model_name_lower }}.pk) {{'}}'}}" method="post" up-layer="parent">
     {{'{{'}} csrf_input {{'}}'}}
     <div class="text-center">
         <h1 class="text-xl font-bold">Are you sure you want to delete this {{ model_name_lower }}?</h1>
     </div>
 
     <div class="flex gap-4 mt-4">
-        <a href="{{'{{'}} url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) {{'}}'}}" class="btn grow">Cancel</a>
+        <a href="{{'{{'}} url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) {{'}}'}}" class="btn grow" up-dismiss>Cancel</a>
         <button type="submit" class="btn btn-error grow">Delete</button>
     </div>
 </form>

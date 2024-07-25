@@ -2,7 +2,7 @@
 
 {{'{%'}} set is_edit = True if {{ model_name_lower }} else False {{'%}'}}
 {{'{%'}} set action_url = url("{{ model_name_lower }}s:update", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_lower }}s:create") {{'%}'}}
-{{'{%'}} set cancel_url = url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) if is_edit else url("{{model_name_lower}}s:list") {{'%}'}}
+{{'{%'}} set cancel_url = url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_lower }}s:list") {{'%}'}}
 {{'{%'}} set submit_text = "Save" if is_edit else "Create" {{'%}'}}
 {{'{%'}} set header_text = "Edit {{ model_name }}" if is_edit else "Create {{ model_name }}" {{'%}'}}
 
@@ -11,11 +11,11 @@
     <h1>{{'{{'}} header_text {{'}}'}}</h1>
 </div>
 
-<form action="{{'{{'}} action_url {{'}}'}}" method="post">
+<form action="{{'{{'}} action_url {{'}}'}}" method="post" up-layer="parent">
     {{'{{'}} csrf_input {{'}}'}}
     {{'{{'}} form.as_div() {{'}}'}}
     <div class="flex gap-4 mt-4">
-        <a href="{{'{{'}} cancel_url {{'}}'}}" class="btn grow">Cancel</a>
+        <a href="{{'{{'}} cancel_url {{'}}'}}" class="btn grow" up-dismiss>Cancel</a>
         <button type="submit" class="btn btn-primary grow">{{'{{'}} submit_text {{'}}'}}</button>
     </div>
 </form>

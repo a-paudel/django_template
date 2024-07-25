@@ -20,6 +20,11 @@ class {{model_name}}CreateView(CreateView):
         obj = cast({{model_name}}, self.object)  # type: ignore
         return reverse("{{model_name_lower}}s:detail", kwargs={"pk": obj.pk})
 
+    def form_invalid(self, form) -> HttpResponse:
+        resp = super().form_invalid(form)
+        resp.status_code = 422
+        return resp
+
 
 class {{model_name}}DetailView(DetailView):
     model = {{model_name}}
@@ -34,6 +39,11 @@ class {{model_name}}UpdateView(UpdateView):
     def get_success_url(self) -> str:
         obj = cast({{model_name}}, self.object)  # type: ignore
         return reverse("{{model_name_lower}}s:detail", kwargs={"pk": obj.pk})
+
+    def form_invalid(self, form) -> HttpResponse:
+        resp = super().form_invalid(form)
+        resp.status_code = 422
+        return resp
 
 
 class {{model_name}}DeleteView(DeleteView):

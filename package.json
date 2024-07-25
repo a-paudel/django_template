@@ -8,6 +8,7 @@
     "@iconify-json/carbon": "^1.1.32",
     "@iconify/tailwind": "^1.0.1",
     "@tailwindcss/typography": "^0.5.13",
+    "alpinejs": "^3.14.1",
     "autoprefixer": "^10.4.19",
     "concurrently": "^8.2.2",
     "daisyui": "^4.11.1",
