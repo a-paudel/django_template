@@ -11,7 +11,7 @@
     </div>
 
     <div class="flex gap-4 mt-4">
-        <a href="{{'{{'}} cancel_url {{'}}'}}" class="btn grow">Cancel</a>
+        <a href="{{'{{'}} url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) {{'}}'}}" class="btn grow">Cancel</a>
         <button type="submit" class="btn btn-error grow">Delete</button>
     </div>
 </form>
