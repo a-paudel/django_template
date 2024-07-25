@@ -38,8 +38,10 @@ class BaseForm(forms.Form):
 
             # replace the class name for each type
             if is_select:
+                # select-bordered select-error
                 new_classes = new_classes.replace("input", "select")
             elif is_textarea:
+                # textarea-bordered textarea-error
                 new_classes = new_classes.replace("input", "textarea")
 
             initial_classes = field.widget.attrs.get("class", "")
