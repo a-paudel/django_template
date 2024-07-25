@@ -5,7 +5,18 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:d8d86086ddf631e87673120aeeef50a56626d2a4c168305cb01dd3940e1e5a83"
+content_hash = "sha256:1b981530e5b7356ac8a5808d461d30ed1c904bfb8801bb685ee53cceefe68aab"
+
+[[package]]
+name = "ansicon"
+version = "1.89.0"
+summary = "Python wrapper for loading Jason Hood's ANSICON"
+groups = ["default"]
+marker = "platform_system == \"Windows\""
+files = [
+    {file = "ansicon-1.89.0-py2.py3-none-any.whl", hash = "sha256:f1def52d17f65c2c9682cf8370c03f541f410c1752d6a14029f97318e4b9dfec"},
+    {file = "ansicon-1.89.0.tar.gz", hash = "sha256:e4d039def5768a47e4afec8e89e83ec3ae5a26bf00ad851f914d1240b444d2b1"},
+]
 
 [[package]]
 name = "asgiref"
@@ -16,6 +27,22 @@ groups = ["default"]
 files = [
     {file = "asgiref-3.8.1-py3-none-any.whl", hash = "sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47"},
     {file = "asgiref-3.8.1.tar.gz", hash = "sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590"},
+]
+
+[[package]]
+name = "blessed"
+version = "1.20.0"
+requires_python = ">=2.7"
+summary = "Easy, practical library for making terminal apps, by providing an elegant, well-documented interface to Colors, Keyboard input, and screen Positioning capabilities."
+groups = ["default"]
+dependencies = [
+    "jinxed>=1.1.0; platform_system == \"Windows\"",
+    "six>=1.9.0",
+    "wcwidth>=0.1.4",
+]
+files = [
+    {file = "blessed-1.20.0-py2.py3-none-any.whl", hash = "sha256:0c542922586a265e699188e52d5f5ac5ec0dd517e5a1041d90d2bbf23f906058"},
+    {file = "blessed-1.20.0.tar.gz", hash = "sha256:2cdd67f8746e048f00df47a2880f4d6acbcdb399031b604e34ba8f71d5787680"},
 ]
 
 [[package]]
@@ -170,6 +197,21 @@ files = [
 ]
 
 [[package]]
+name = "editor"
+version = "1.6.6"
+requires_python = ">=3.8"
+summary = "🖋 Open the default text editor 🖋"
+groups = ["default"]
+dependencies = [
+    "runs",
+    "xmod",
+]
+files = [
+    {file = "editor-1.6.6-py3-none-any.whl", hash = "sha256:e818e6913f26c2a81eadef503a2741d7cca7f235d20e217274a009ecd5a74abf"},
+    {file = "editor-1.6.6.tar.gz", hash = "sha256:bb6989e872638cd119db9a4fce284cd8e13c553886a1c044c6b8d8a160c871f8"},
+]
+
+[[package]]
 name = "editorconfig"
 version = "0.12.4"
 summary = "EditorConfig File Locator and Interpreter for Python"
@@ -229,6 +271,22 @@ files = [
 ]
 
 [[package]]
+name = "inquirer"
+version = "3.3.0"
+requires_python = ">=3.8.1"
+summary = "Collection of common interactive command line user interfaces, based on Inquirer.js"
+groups = ["default"]
+dependencies = [
+    "blessed>=1.19.0",
+    "editor>=1.6.0",
+    "readchar>=3.0.6",
+]
+files = [
+    {file = "inquirer-3.3.0-py3-none-any.whl", hash = "sha256:c4be527e8c4e7a1b2c909aa064ef6f1a4466be42224290f21f07f6d5947171f4"},
+    {file = "inquirer-3.3.0.tar.gz", hash = "sha256:2722cec4460b289aab21fc35a3b03c932780ff4e8004163955a8215e20cfd35e"},
+]
+
+[[package]]
 name = "jinja2"
 version = "3.1.4"
 requires_python = ">=3.7"
@@ -240,6 +298,20 @@ dependencies = [
 files = [
     {file = "jinja2-3.1.4-py3-none-any.whl", hash = "sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d"},
     {file = "jinja2-3.1.4.tar.gz", hash = "sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369"},
+]
+
+[[package]]
+name = "jinxed"
+version = "1.2.1"
+summary = "Jinxed Terminal Library"
+groups = ["default"]
+marker = "platform_system == \"Windows\""
+dependencies = [
+    "ansicon; platform_system == \"Windows\"",
+]
+files = [
+    {file = "jinxed-1.2.1-py2.py3-none-any.whl", hash = "sha256:37422659c4925969c66148c5e64979f553386a4226b9484d910d3094ced37d30"},
+    {file = "jinxed-1.2.1.tar.gz", hash = "sha256:30c3f861b73279fea1ed928cfd4dfb1f273e16cd62c8a32acfac362da0f78f3f"},
 ]
 
 [[package]]
@@ -469,6 +541,17 @@ files = [
 ]
 
 [[package]]
+name = "readchar"
+version = "4.1.0"
+requires_python = ">=3.8"
+summary = "Library to easily read single chars and key strokes"
+groups = ["default"]
+files = [
+    {file = "readchar-4.1.0-py3-none-any.whl", hash = "sha256:d163680656b34f263fb5074023db44b999c68ff31ab394445ebfd1a2a41fe9a2"},
+    {file = "readchar-4.1.0.tar.gz", hash = "sha256:6f44d1b5f0fd93bd93236eac7da39609f15df647ab9cea39f5bc7478b3344b99"},
+]
+
+[[package]]
 name = "redis"
 version = "5.0.4"
 requires_python = ">=3.7"
@@ -517,6 +600,20 @@ dependencies = [
 files = [
     {file = "rq-1.16.2-py3-none-any.whl", hash = "sha256:52e619f6cb469b00e04da74305045d244b75fecb2ecaa4f26422add57d3c5f09"},
     {file = "rq-1.16.2.tar.gz", hash = "sha256:5c5b9ad5fbaf792b8fada25cc7627f4d206a9a4455aced371d4f501cc3f13b34"},
+]
+
+[[package]]
+name = "runs"
+version = "1.2.2"
+requires_python = ">=3.8"
+summary = "🏃 Run a block of text as a subprocess 🏃"
+groups = ["default"]
+dependencies = [
+    "xmod",
+]
+files = [
+    {file = "runs-1.2.2-py3-none-any.whl", hash = "sha256:0980dcbc25aba1505f307ac4f0e9e92cbd0be2a15a1e983ee86c24c87b839dfd"},
+    {file = "runs-1.2.2.tar.gz", hash = "sha256:9dc1815e2895cfb3a48317b173b9f1eac9ba5549b36a847b5cc60c3bf82ecef1"},
 ]
 
 [[package]]
@@ -579,6 +676,16 @@ files = [
 ]
 
 [[package]]
+name = "wcwidth"
+version = "0.2.13"
+summary = "Measures the displayed width of unicode strings in a terminal"
+groups = ["default"]
+files = [
+    {file = "wcwidth-0.2.13-py2.py3-none-any.whl", hash = "sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859"},
+    {file = "wcwidth-0.2.13.tar.gz", hash = "sha256:72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5"},
+]
+
+[[package]]
 name = "whitenoise"
 version = "6.6.0"
 requires_python = ">=3.8"
@@ -587,4 +694,15 @@ groups = ["default"]
 files = [
     {file = "whitenoise-6.6.0-py3-none-any.whl", hash = "sha256:b1f9db9bf67dc183484d760b99f4080185633136a273a03f6436034a41064146"},
     {file = "whitenoise-6.6.0.tar.gz", hash = "sha256:8998f7370973447fac1e8ef6e8ded2c5209a7b1f67c1012866dbcd09681c3251"},
+]
+
+[[package]]
+name = "xmod"
+version = "1.8.1"
+requires_python = ">=3.8"
+summary = "🌱 Turn any object into a module 🌱"
+groups = ["default"]
+files = [
+    {file = "xmod-1.8.1-py3-none-any.whl", hash = "sha256:a24e9458a4853489042522bdca9e50ee2eac5ab75c809a91150a8a7f40670d48"},
+    {file = "xmod-1.8.1.tar.gz", hash = "sha256:38c76486b9d672c546d57d8035df0beb7f4a9b088bc3fb2de5431ae821444377"},
 ]

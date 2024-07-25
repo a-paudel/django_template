@@ -3,47 +3,49 @@ from typing import Any
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from jinja2 import Template
+import inquirer
 
 
 class Command(BaseCommand):
-    def get_app(self) -> str:
-        while True:
-            app = input("Enter the name of the app:\n")
-            valid_apps = [
-                app
-                for app in settings.INSTALLED_APPS
-                if app
-                not in [
-                    "django.contrib.admin",
-                    "django.contrib.auth",
-                    "django.contrib.contenttypes",
-                    "django.contrib.sessions",
-                    "django.contrib.messages",
-                    "whitenoise.runserver_nostatic",
-                    "django.contrib.staticfiles",
-                    "django_vite",
-                    "debug_toolbar",
-                    "django_rq",
-                    "django_rq_email_backend",
-                    "core",
-                    "users",
-                ]
+    def get_input(self):
+        app_names = [
+            a
+            for a in settings.INSTALLED_APPS
+            if a
+            not in [
+                "django.contrib.admin",
+                "django.contrib.auth",
+                "django.contrib.contenttypes",
+                "django.contrib.sessions",
+                "django.contrib.messages",
+                "whitenoise.runserver_nostatic",
+                "django.contrib.staticfiles",
+                "django_vite",
+                "debug_toolbar",
+                "django_rq",
+                "django_rq_email_backend",
+                "core",
+                "users",
             ]
+        ]
 
-            if app in valid_apps:
-                return app
-
-            print(f"Invalid app name. Check if app is present in INSTALLED_APPS. Valid apps are: {valid_apps}")
-
-    def get_model(self) -> str:
-        while True:
-            model = input("Enter the name of the model:\n")
-            if model:
-                return model.title()
+        if not app_names:
+            print("No valid apps found. Check the INSTALLED_APPS setting.")
+            return
+        questions = [
+            inquirer.List("app_name", message="Select the app", choices=app_names),
+            inquirer.Text("model_name", message="Enter the model name"),
+        ]
+        answers = inquirer.prompt(questions)
+        return answers
 
     def handle(self, *args: Any, **options: Any) -> str | None:
-        app_name = self.get_app()
-        model_name = self.get_model()
+        answers = self.get_input()
+        if not answers:
+            return
+        app_name = answers["app_name"]
+        model_name = answers["model_name"]
+        model_name = model_name.replace(" ", "")
         model_name_lower = model_name.lower()
 
         base_dir: Path = settings.BASE_DIR
@@ -112,15 +114,12 @@ class Command(BaseCommand):
             print("The following files already exist:")
             for file in existing_files:
                 print(file)
-            while True:
-                overwrite = input("Do you want to overwrite them? (y/N)\n") or "n"
-                overwrite = overwrite.lower()[0]
-                if overwrite not in ["y", "n"]:
-                    print("Invalid input. Please enter 'y' or 'n'")
-                    continue
-                if overwrite == "n":
-                    return
-                break
+            answers = inquirer.prompt([inquirer.Confirm("overwrite", message="Do you want to overwrite them?")])
+            if not answers:
+                return
+            overwrite = answers["overwrite"]
+            if not overwrite:
+                return
 
         # touch all files
         for file in list(init_files.values()) + list(files_to_create.values()):
@@ -183,5 +182,5 @@ class Command(BaseCommand):
             )
             files_to_create[template_name].write_text(template_content)
 
-        print(f"Create CRUD files for {app_name}.{model_name}")
+        print(f"Created CRUD files for {app_name}.{model_name}")
         print("Don't forget to add the urls to the main urls.py file")

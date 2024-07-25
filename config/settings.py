@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     "django_rq_email_backend",
     "core",
     "users",
+    "galaxy",
+    "demoapp",
 ]
 
 MIDDLEWARE = [

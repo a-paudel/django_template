@@ -19,6 +19,7 @@ dependencies = [
     "redis>=5.0.4",
     "django-rq>=2.10.2",
     "django-rq-email-backend>=1.0.1",
+    "inquirer>=3.3.0",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"
