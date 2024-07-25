@@ -64,6 +64,7 @@ class Command(BaseCommand):
         # define the stubs
         file_stubs = {
             "models": Path(__file__).parent / "stubs" / "models.py.jinja2",
+            "forms": Path(__file__).parent / "stubs" / "forms.py.jinja2",
         }
 
         # delete existing files
@@ -83,6 +84,7 @@ class Command(BaseCommand):
         # create the files
         files_to_create = {
             "models": base_dir / app_name / "models" / f"{model_name_lower}s.py",
+            "forms": base_dir / app_name / "forms" / f"{model_name_lower}s.py",
         }
 
         existing_files = []
@@ -113,3 +115,13 @@ class Command(BaseCommand):
         models_init_file_content = init_files["models"].read_text()
         if models_import_text not in models_init_file_content:
             init_files["models"].write_text(models_import_text + models_init_file_content)
+
+        # create the forms file
+        forms_template = Template(file_stubs["forms"].read_text())
+        forms_content = forms_template.render(app_name=app_name, model_name=model_name)
+        files_to_create["forms"].write_text(forms_content)
+        # add imports to __init__.py
+        forms_import_text = f"\nfrom .{model_name_lower}s import {model_name}CreateForm, {model_name}UpdateForm\n"
+        forms_init_file_content = init_files["forms"].read_text()
+        if forms_import_text not in forms_init_file_content:
+            init_files["forms"].write_text(forms_import_text + forms_init_file_content)
