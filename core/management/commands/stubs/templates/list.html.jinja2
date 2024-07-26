@@ -7,7 +7,7 @@
 
 {{'{#'}} create button {{'#}'}}
 <div class="flex justify-end mt-4">
-    <a href="{{'{{'}} url("{{ model_name_lower }}s:create") {{'}}'}}" class="rounded-b-none btn btn-primary" up-layer="new">Create {{ model_name }}</a>
+    <a href="{{'{{'}} url("{{ model_name_lower }}s:create") {{'}}'}}" class="rounded-b-none btn btn-primary" up-layer="new" up-accept-location="{{'{{'}} url("{{ model_name_lower }}s:detail", pk=0).replace('0', '$id') {{'}}'}}" up-on-accepted="location.href=value.location">Create {{ model_name }}</a>
 </div>
 
 {{'{#'}} table {{'#}'}}
