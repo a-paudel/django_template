@@ -55,18 +55,18 @@ class Command(BaseCommand):
         base_dir: Path = settings.BASE_DIR
 
         # create the folders
-        init_file = base_dir / app_name / "views" / "__init__.py"
+        init_file = base_dir / app_name / "forms" / "__init__.py"
 
-        stub_file = Path(__file__).parent / "stubs" / "views.py.jinja2"
+        stub_file = Path(__file__).parent / "stubs" / "forms.py.jinja2"
 
-        file_to_create = base_dir / app_name / "views" / f"{model_name_plural_lower}.py"
+        file_to_create = base_dir / app_name / "forms" / f"{model_name_plural_lower}.py"
 
         # create the folders
         for file in [init_file, file_to_create]:
             file.parent.mkdir(parents=True, exist_ok=True)
 
         # delete existing files
-        file_to_delete = base_dir / app_name / "views.py"
+        file_to_delete = base_dir / app_name / "forms.py"
 
         for file in [file_to_delete]:
             if file.exists():
@@ -96,8 +96,8 @@ class Command(BaseCommand):
             model_name_plural_lower=model_name_plural_lower,
         )
         file_to_create.write_text(file_content)
-        # init file
-        # import_text = f"\nfrom .{model_name_plural_lower} import {model_name}ListView, {model_name}CreateView, {model_name}DetailView, {model_name}UpdateView, {model_name}DeleteView\n"
+        # # init file
+        # import_text = f"\nfrom .{model_name_plural_lower} import {model_name}CreateForm, {model_name}UpdateForm\n"
         # views_init_file_content = init_file.read_text()
         # if import_text not in views_init_file_content:
         #     init_file.write_text(import_text + views_init_file_content)
