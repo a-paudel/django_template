@@ -1,8 +1,8 @@
 {{'{%'}} extends 'layouts/{{ app_name }}.html' {{'%}'}}
 
 {{'{%'}} set is_edit = True if {{ model_name_lower }} else False {{'%}'}}
-{{'{%'}} set action_url = url("{{ model_name_lower }}s:update", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_lower }}s:create") {{'%}'}}
-{{'{%'}} set cancel_url = url("{{ model_name_lower }}s:detail", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_lower }}s:list") {{'%}'}}
+{{'{%'}} set action_url = url("{{ model_name_plural_lower }}:update", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_plural_lower }}:create") {{'%}'}}
+{{'{%'}} set cancel_url = url("{{ model_name_plural_lower }}:detail", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_plural_lower }}:list") {{'%}'}}
 {{'{%'}} set submit_text = "Save" if is_edit else "Create" {{'%}'}}
 {{'{%'}} set header_text = "Edit {{ model_name }}" if is_edit else "Create {{ model_name }}" {{'%}'}}
 
