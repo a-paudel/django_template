@@ -1,11 +1,8 @@
-from pathlib import Path
 from typing import Any
 from django.core.management.base import BaseCommand, CommandParser
 from django.core.management import call_command
-from django.conf import settings
 from django.db.models import Model
 from django.apps import apps
-from jinja2 import Template
 import inquirer
 
 
