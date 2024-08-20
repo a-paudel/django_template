@@ -55,18 +55,18 @@ class Command(BaseCommand):
         base_dir: Path = settings.BASE_DIR
 
         # create the folders
-        init_file = base_dir / app_name / "forms" / "__init__.py"
+        init_file = base_dir / app_name / "urls" / "__init__.py"
 
-        stub_file = Path(__file__).parent / "stubs" / "forms.py.jinja2"
+        stub_file = Path(__file__).parent / "stubs" / "urls.py.jinja2"
 
-        file_to_create = base_dir / app_name / "forms" / f"{model_name_plural_lower}.py"
+        file_to_create = base_dir / app_name / "urls" / f"{model_name_plural_lower}.py"
 
         # create the folders
         for file in [init_file, file_to_create]:
             file.parent.mkdir(parents=True, exist_ok=True)
 
         # delete existing files
-        file_to_delete = base_dir / app_name / "forms.py"
+        file_to_delete = base_dir / app_name / "urls.py"
 
         for file in [file_to_delete]:
             if file.exists():
@@ -102,4 +102,4 @@ class Command(BaseCommand):
         # if import_text not in views_init_file_content:
         #     init_file.write_text(import_text + views_init_file_content)
 
-        print(f"Created forms for {app_name}.{model_name}")
+        print(f"Created urls for {app_name}.{model_name}")
