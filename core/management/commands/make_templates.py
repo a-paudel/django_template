@@ -89,12 +89,13 @@ class Command(BaseCommand):
         # touch all files
         for file in files_to_create.values():
             file.touch()
-
+            
         # create the file
         for key, stub_file in stub_files.items():
             template = Template(stub_file.read_text())
             file_content = template.render(
                 app_name=app_name,
+                model=model,
                 model_name=model_name,
                 model_name_lower=model_name_lower,
                 model_name_plural=model_name_plural,
