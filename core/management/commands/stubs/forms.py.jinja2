@@ -5,9 +5,9 @@ from {{app_name}}.models import {{model_name}}
 class {{model_name}}CreateForm(BaseForm, forms.ModelForm):
     class Meta:
         model = {{model_name}}
-        fields = "__all__"
+        fields = {{model._meta.get_fields()|selectattr("editable")|map(attribute="name")|list}}
 
 class {{model_name}}UpdateForm(BaseForm, forms.ModelForm):
     class Meta:
         model = {{model_name}}
-        fields = "__all__"
+        fields = {{model._meta.get_fields()|selectattr("editable")|map(attribute="name")|list}}

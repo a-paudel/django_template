@@ -90,6 +90,7 @@ class Command(BaseCommand):
         template = Template(stub_file.read_text())
         file_content = template.render(
             app_name=app_name,
+            model=model,
             model_name=model_name,
             model_name_lower=model_name_lower,
             model_name_plural=model_name_plural,
