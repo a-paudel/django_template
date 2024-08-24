@@ -12,7 +12,9 @@
             <thead>
                 <tr>
                     {{'{#'}} fields titles {{'#}'}}
-                    {% for field in model._meta.get_fields() %}<th>{{ field.verbose_name.title() }}</th>{% endfor %}
+                    {% for field in model._meta.get_fields()|selectattr("verbose_name") %}
+                        <th>{{ field.verbose_name.title() }}</th>
+                    {% endfor %}
                     {{'{#'}} edit / delete buttons {{'#}'}}
                     {{'{%'}} if edit or delete {{'%}'}}
                     <th>Actions</th>
@@ -25,12 +27,12 @@
 
                     {{'{#'}} field values {{'#}'}}
                     {# first item should be a link #}
-                    {% set field = model._meta.get_fields()[0] %}
+                    {% set field = model._meta.get_fields()|selectattr("verbose_name")|first %}
                     <td>
                         <a {{'{%'}} if hover {{'%}'}}href="{{'{{'}}url("{{ model_name_plural_lower }}:detail", pk={{ model_name_lower }}.pk){{'}}'}}"{{'{%'}} endif {{'%}'}}>{{'{{'}} {{ model_name_lower }}.{{ field.name }} {{'}}'}}</a>
                     </td>
                     {# other fields #}
-                    {% for field in model._meta.get_fields()[1:] %}
+                    {% for field in (model._meta.get_fields()|selectattr("verbose_name")|list)[1:] %}
                         <td>{{'{{'}} {{ model_name_lower }}.{{ field.name }} {{'}}'}}</td>
                     {% endfor %}
 
