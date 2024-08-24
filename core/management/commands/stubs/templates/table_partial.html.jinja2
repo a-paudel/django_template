@@ -12,8 +12,7 @@
             <thead>
                 <tr>
                     {{'{#'}} fields titles {{'#}'}}
-                    <th></th>
-
+                    {% for field in model._meta.get_fields() %}<th>{{ field.verbose_name.title() }}</th>{% endfor %}
                     {{'{#'}} edit / delete buttons {{'#}'}}
                     {{'{%'}} if edit or delete {{'%}'}}
                     <th>Actions</th>
@@ -23,8 +22,17 @@
             <tbody class="bg-base-100">
                 {{'{%'}} for {{ model_name_lower }} in {{ model_name_lower }}_list {{'%}'}}
                 <tr {{'{%'}} if hover {{'%}'}}class="cursor-pointer hover" onclick="this.querySelector('a')?.click()"{{'{%'}} endif {{'%}'}}>
+
                     {{'{#'}} field values {{'#}'}}
-                    <td></td>
+                    {# first item should be a link #}
+                    {% set field = model._meta.get_fields()[0] %}
+                    <td>
+                        <a {{'{%'}} if hover {{'%}'}}href="{{'{{'}}url("{{ model_name_plural_lower }}:detail", pk={{ model_name_lower }}.pk){{'}}'}}"{{'{%'}} endif {{'%}'}}>{{'{{'}} {{ model_name_lower }}.{{ field.name }} {{'}}'}}</a>
+                    </td>
+                    {# other fields #}
+                    {% for field in model._meta.get_fields()[1:] %}
+                        <td>{{'{{'}} {{ model_name_lower }}.{{ field.name }} {{'}}'}}</td>
+                    {% endfor %}
 
                     {{'{#'}} edit and delete button {{'#}'}}
                     {{'{%'}} if edit or delete {{'%}'}}
