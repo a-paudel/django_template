@@ -5,6 +5,8 @@
 
 
 <div class="p-2 bg-base-300">
+{{'{%'}} if {{model_name_lower}}_list {{'%}'}}
+    
     {{'{#'}} table container {{'#}'}}
     <div class="overflow-x-auto">
         {{'{#'}} table {{'#}'}}
@@ -63,4 +65,7 @@
         {{'{{'}} pagination_links(request, paginator, page_obj, with_query_params=True, object_name="{{ model_name }}s") {{'}}'}}
     </div>
     {{'{%'}} endif {{'%}'}}
+    {{'{%'}} else {{'%}'}}
+    <div class="my-10 text-xl font-bold text-center">No {{model_name_plural}} found</div>
+{{'{%'}} endif {{'%}'}}
 </div>
