@@ -1,8 +1,5 @@
 {{'{%'}} extends 'layouts/{{ app_name }}.html' {{'%}'}}
 {{'{%'}} block main {{'%}'}}
-<div class="prose">
-    <h1>{{ model_name }} Details</h1>
-</div>
 
 <div class="mt-4">
     {{'{%'}} with {{ model_name_lower }}_list=[{{ model_name_lower }}], edit=True, delete=True {{'%}'}}
