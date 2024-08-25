@@ -77,6 +77,8 @@ class Command(BaseCommand):
 
         existing_files = []
         for file in files_to_create.values():
+            if file == files_to_create["layout"]:
+                continue
             if file.exists():
                 existing_files.append(file)
         if existing_files:
@@ -89,7 +91,7 @@ class Command(BaseCommand):
         # touch all files
         for file in files_to_create.values():
             file.touch()
-            
+
         # create the file
         for key, stub_file in stub_files.items():
             template = Template(stub_file.read_text())
@@ -102,6 +104,10 @@ class Command(BaseCommand):
                 model_name_plural_lower=model_name_plural_lower,
             )
             file_to_create = files_to_create[key]
+            # if template file, only write if empty
+            if key == "layout":
+                if file_to_create.read_text().strip():
+                    continue
             file_to_create.write_text(file_content)
         # init file
         # import_text = f"\nfrom .{model_name_plural_lower} import {model_name}ListView, {model_name}CreateView, {model_name}DetailView, {model_name}UpdateView, {model_name}DeleteView\n"
