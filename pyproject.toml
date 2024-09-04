@@ -20,6 +20,8 @@ dependencies = [
     "django-rq>=2.10.2",
     "django-rq-email-backend>=1.0.1",
     "inquirer>=3.3.0",
+    "django-unfold>=0.37.0",
+    "django-jazzmin>=3.0.0",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"

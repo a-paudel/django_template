@@ -1,53 +1,59 @@
 x-build: &build
-  build: .
-  depends_on: [db, redis, mailpit]
-  env_file: .env
-  environment:
-    - PORT=8000
-    - DJANGO_DB_URL=mysql://demo:pass@db:3306/db_name
-    - DJANGO_REDIS_URL=redis://redis:6379/0
-    - DJANGO_DEBUG=false
-    - DJANGO_EMAIL_HOST=mailpit
-    - DJANGO_EMAIL_USERNAME=root
-    - DJANGO_EMAIL_USERNAME=pass
-    - DJANGO_EMAIL_FROM_ADDRESS=demo@djangoappname.com
-    - DJANGO_EMAIL_FROM_NAME="${DJANGO_APP_NAME}"
-    - DJANGO_EMAIL_TLS=true
+    build: .
+    depends_on: [db, redis, mailpit]
+    env_file: .env
+    environment:
+        - PORT=8000
+        - DJANGO_DB_URL=postgres://postgres:pass@db:5432/postgres
+        - DJANGO_REDIS_URL=redis://:pass@redis
+        - DJANGO_DEBUG=false
+        - DJANGO_EMAIL_HOST=mailpit
+        - DJANGO_EMAIL_USERNAME=root
+        - DJANGO_EMAIL_USERNAME=pass
+        - DJANGO_EMAIL_FROM_ADDRESS=demo@djangoappname.com
+        - DJANGO_EMAIL_FROM_NAME="${DJANGO_APP_NAME}"
+        - DJANGO_EMAIL_TLS=true
+    volumes:
+        - media_files:/app/media
 
 services:
-  db:
-    image: bitnami/mariadb:latest
-    environment:
-      - MARIADB_ROOT_PASSWORD=secret
-      - MARIADB_USER=demo
-      - MARIADB_PASSWORD=pass
-      - MARIADB_DATABASE=db_name
-    volumes:
-      - db_data:/bitnami/mariadb
-    healthcheck:
-      test: ["CMD", "mariadb-admin", "-ppass", "ping"]
-      timeout: 3s
-      retries: 10
-  redis:
-    image: bitnami/redis:latest
-    volumes:
-      - redis_data:/bitnami/redis
-  mailpit:
-    image: axllent/mailpit:latest
-    ports:
-      - "8080:8025"
-    environment:
-      - MP_SMTP_AUTH_ACCEPT_ANY=1
-      - MP_SMTP_AUTH_ALLOW_INSECURE=1
-
-  server:
-    <<: *build
-    ports:
-      - "8000:8000"
-  task-worker:
-    <<: *build
-    command: pdm run python manage.py rqworker default
+    db:
+        image: bitnami/postgresql:latest
+        environment:
+            - POSTGRESQL_PASSWORD=pass
+        volumes:
+            - db_data:/bitnami/postgresql
+    redis:
+        image: bitnami/redis:latest
+        environment:
+            - REDIS_PASSWORD=pass
+        volumes:
+            - redis_data:/bitnami/redis
+    mailpit:
+        image: axllent/mailpit:latest
+        ports:
+            - "8080:8025"
+        environment:
+            - MP_SMTP_AUTH_ACCEPT_ANY=1
+            - MP_SMTP_AUTH_ALLOW_INSECURE=1
+    server:
+        <<: *build
+    task-worker:
+        <<: *build
+        command: pdm run python manage.py rqworker default
+    proxy:
+        image: caddy:alpine
+        ports:
+            - 8000:8000
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile:ro
+            - caddy_data:/data
+            - caddy_config:/config
+            - media_files:/app/media:ro
 
 volumes:
-  db_data:
-  redis_data:
+    db_data:
+    redis_data:
+    caddy_data:
+    caddy_config:
+    media_files:
