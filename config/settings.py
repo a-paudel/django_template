@@ -170,7 +170,7 @@ DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO
 # Background tasks settings
 RQ_QUEUES = {
     "default": {
-        "URL": os.getenv("DJANGO_REDIS_URL"),
+        "URL": os.getenv("DJANGO_REDIS_URL", "redis://localhost"),
     }
 }
 
