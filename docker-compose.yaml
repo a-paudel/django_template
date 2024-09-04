@@ -13,6 +13,8 @@ x-build: &build
         - DJANGO_EMAIL_FROM_ADDRESS=demo@djangoappname.com
         - DJANGO_EMAIL_FROM_NAME="${DJANGO_APP_NAME}"
         - DJANGO_EMAIL_TLS=true
+    volumes:
+        - media_files:/app/media
 
 services:
     db:
@@ -36,12 +38,22 @@ services:
             - MP_SMTP_AUTH_ALLOW_INSECURE=1
     server:
         <<: *build
-        ports:
-            - "8000:8000"
     task-worker:
         <<: *build
         command: pdm run python manage.py rqworker default
+    proxy:
+        image: caddy:alpine
+        ports:
+            - 8000:8000
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile:ro
+            - caddy_data:/data
+            - caddy_config:/config
+            - media_files:/app/media:ro
 
 volumes:
     db_data:
     redis_data:
+    caddy_data:
+    caddy_config:
+    media_files:

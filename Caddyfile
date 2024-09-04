@@ -1,0 +1,12 @@
+http://localhost:8000 {
+	encode gzip
+
+	handle /media/* {
+		root * /app/media
+		file_server
+	}
+
+	handle {
+		reverse_proxy server:8000
+	}
+}
