@@ -13,6 +13,9 @@ export default {
   theme: {
     extend: {},
   },
+  daisyui: {
+    themes: ["cupcake"],
+  },
   plugins: [
     typography,
     daisyui,

@@ -8,6 +8,7 @@ export default defineConfig({
         rollupOptions: {
             input: [
                 "resources/js/app.ts",
+                "resources/css/app.css",
             ]
         }
     }

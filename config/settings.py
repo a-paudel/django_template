@@ -16,6 +16,7 @@ import dotenv
 import dj_database_url
 import os
 import pymysql
+from django_vite.templatetags.django_vite import vite_asset_url
 
 pymysql.install_as_MySQLdb()
 
@@ -41,8 +42,12 @@ INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "").split(";")
 
 
 # Application definition
-
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.inlines",  # optional, if special inlines are needed
+    # unfold contrib apps can be added for import_export, guardian, simple_history, etc.
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -184,4 +189,10 @@ DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
     }
+}
+
+
+UNFOLD = {
+    "STYLES": [lambda x: vite_asset_url("resources/css/app.css")],
+    "SCRIPTS": [lambda x: vite_asset_url("resources/js/app.ts")],
 }
