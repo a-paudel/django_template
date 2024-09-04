@@ -173,6 +173,7 @@ RQ_QUEUES = {
         "URL": os.getenv("DJANGO_REDIS_URL", "redis://localhost"),
     }
 }
+RQ_SHOW_ADMIN_LINK = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
