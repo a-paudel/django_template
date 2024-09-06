@@ -20,24 +20,9 @@ class LoginView(_DjangoLoginView):
     form_class = LoginForm
     template_name = "users/login.html"
 
-    def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None:
-        next = request.GET.get("next")
-        self.next = reverse(next) if next else "/"
-        return super().setup(request, *args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return self.next
 
 
 class LogoutView(_DjangoLogoutView):
-    def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None:
-        next = request.GET.get("next")
-        self.next = reverse(next) if next else "/"
-        return super().setup(request, *args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return self.next
-
     pass
 
 
@@ -45,13 +30,6 @@ class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = "users/register.html"
 
-    def setup(self, request: HttpRequest, *args: Any, **kwargs: Any) -> None:
-        next = request.GET.get("next")
-        self.next = reverse(next) if next else "/"
-        return super().setup(request, *args, **kwargs)
-
-    def get_success_url(self) -> str:
-        return self.next
 
 
 class PasswordResetView(_DjangoPasswordResetView):
