@@ -80,7 +80,8 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [BASE_DIR / "jinja"],
+        "DIRS": [BASE_DIR / "jinja2"],
+        "APP_DIRS": True,
         "OPTIONS": {
             "environment": "config.jinja2.environment",
         },
