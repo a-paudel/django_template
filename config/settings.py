@@ -80,7 +80,8 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [BASE_DIR / "jinja"],
+        "DIRS": [BASE_DIR / "jinja2"],
+        "APP_DIRS": True,
         "OPTIONS": {
             "environment": "config.jinja2.environment",
         },
@@ -107,7 +108,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": dj_database_url.config(default=os.getenv("DJANGO_DB_URL", "sqlite:///db.sqlite3"))
+    "default": dj_database_url.config(
+        default=os.getenv("DJANGO_DB_URL", "sqlite:///db.sqlite3")
+    )
     # "default": {
     #     "ENGINE": "django.db.backends.sqlite3",
     #     "NAME": BASE_DIR / "db.sqlite3",
@@ -170,7 +173,9 @@ EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
 EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
 EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
-DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
+DEFAULT_FROM_EMAIL = (
+    f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
+)
 
 # Background tasks settings
 RQ_QUEUES = {

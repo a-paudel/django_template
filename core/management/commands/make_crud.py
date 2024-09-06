@@ -8,7 +8,9 @@ import inquirer
 
 class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
-        parser.add_argument("--model", type=str, help="The model in app.model format.", required=False)
+        parser.add_argument(
+            "--model", type=str, help="The model in app.model format.", required=False
+        )
         return super().add_arguments(parser)
 
     def get_model_key(self, options):
@@ -24,7 +26,14 @@ class Command(BaseCommand):
                 return
             return model
 
-        apps_to_skip = ["admin", "contenttypes", "users", "auth", "sessions", "django_rq"]
+        apps_to_skip = [
+            "admin",
+            "contenttypes",
+            "users",
+            "auth",
+            "sessions",
+            "django_rq",
+        ]
         model_options: dict[str, type[Model]] = {}
         for appname, modeldict in apps.all_models.items():
             if appname in apps_to_skip:
@@ -32,9 +41,13 @@ class Command(BaseCommand):
             for modelname, model in modeldict.items():
                 model_options[f"{appname}.{modelname}"] = model
         if not model_options:
-            print("No valid models found. Check the INSTALLED_APPS setting and models.py files.")
+            print(
+                "No valid models found. Check the INSTALLED_APPS setting and models.py files."
+            )
             return
-        model_key: str = inquirer.list_input("Select the model", choices=model_options) or ""
+        model_key: str = (
+            inquirer.list_input("Select the model", choices=model_options) or ""
+        )
         return model_key
 
     def handle(self, *args: Any, **options: Any) -> str | None:

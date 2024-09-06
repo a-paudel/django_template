@@ -21,7 +21,6 @@ class LoginView(_DjangoLoginView):
     template_name = "users/login.html"
 
 
-
 class LogoutView(_DjangoLogoutView):
     pass
 
@@ -29,7 +28,6 @@ class LogoutView(_DjangoLogoutView):
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = "users/register.html"
-
 
 
 class PasswordResetView(_DjangoPasswordResetView):

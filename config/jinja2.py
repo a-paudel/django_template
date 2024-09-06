@@ -2,7 +2,11 @@ from django.http import HttpRequest
 from jinja2 import Environment
 from django.urls import reverse as _django_reverse
 from django.templatetags.static import static
-from django_vite.templatetags.django_vite import vite_hmr_client, vite_asset, vite_asset_url
+from django_vite.templatetags.django_vite import (
+    vite_hmr_client,
+    vite_asset,
+    vite_asset_url,
+)
 from django.conf import settings
 from django.core.paginator import Paginator, Page
 from django.template.loader import render_to_string

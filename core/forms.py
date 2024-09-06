@@ -8,7 +8,7 @@ class BaseForm(forms.Form):
 
     def as_div(self):
         # render the components/form.html template with the form
-        html = render_to_string("components/form.html", {"form": self})
+        html = render_to_string("components/form_as_div.html", {"form": self})
         return SafeText(html)
 
     def __init__(self, *args, **kwargs):
