@@ -1,4 +1,4 @@
-{{'{%'}} extends '{{ app_name }}/base.html' {{'%}'}}
+{{'{%'}} extends '{{ target_app }}/base.html' {{'%}'}}
 
 {{'{%'}} block main {{'%}'}}
 
@@ -10,7 +10,7 @@
 {{'{#'}} table {{'#}'}}
 <div>
     {{'{%'}} with hover=True, paginate=True {{'%}'}}
-    {{'{%'}} include '{{ app_name }}/{{ model_name_plural_lower }}/partials/table.html' {{'%}'}}
+    {{'{%'}} include '{{ target_app }}/{{ model_name_plural_lower }}/partials/table.html' {{'%}'}}
     {{'{%'}} endwith {{'%}'}}
 </div>
 {{'{%'}} endblock main {{'%}'}}
