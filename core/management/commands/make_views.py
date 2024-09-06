@@ -13,6 +13,9 @@ class Command(BaseCommand):
         parser.add_argument(
             "--model", type=str, help="The model in app.model format.", required=False
         )
+        parser.add_argument(
+            "--targetapp", type=str, help="The app to create the CRUD files in.", required=False,
+        )
         return super().add_arguments(parser)
 
     def get_input(self, options):
@@ -53,9 +56,24 @@ class Command(BaseCommand):
         model = model_options.get(model_key, None)
         return model
 
+
+    def get_target_app(self, options):
+        app_list = [app.name for app in apps.get_app_configs()]
+        app_folders = [folder.name for folder in settings.BASE_DIR.glob("*") if folder.is_dir()]
+        # remove apps that are not apps
+        app_list = [app for app in app_list if app in app_folders]
+
+        target_app = options["targetapp"]
+        if not target_app or target_app not in app_list:
+            target_app = inquirer.list_input("Select the target app", choices=app_list) or ""
+        return target_app
+
     def handle(self, *args: Any, **options: Any) -> str | None:
         model = self.get_input(options)
         if not model:
+            return
+        target_app = self.get_target_app(options)
+        if not target_app:
             return
         app_name = model._meta.app_label
         model_name = model._meta.model_name or ""
@@ -68,11 +86,11 @@ class Command(BaseCommand):
         base_dir: Path = settings.BASE_DIR
 
         # create the folders
-        init_file = base_dir / app_name / "views" / "__init__.py"
+        init_file = base_dir / target_app / "views" / "__init__.py"
 
         stub_file = Path(__file__).parent / "stubs" / "views.py.jinja2"
 
-        file_to_create = base_dir / app_name / "views" / f"{model_name_plural_lower}.py"
+        file_to_create = base_dir / target_app / "views" / f"{model_name_plural_lower}.py"
 
         # create the folders
         for file in [init_file, file_to_create]:
@@ -105,6 +123,7 @@ class Command(BaseCommand):
         template = Template(stub_file.read_text())
         file_content = template.render(
             app_name=app_name,
+            target_app=target_app,
             model_name=model_name,
             model_name_lower=model_name_lower,
             model_name_plural=model_name_plural,
