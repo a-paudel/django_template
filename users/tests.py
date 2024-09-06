@@ -13,14 +13,18 @@ class TestUserLogin(TestCase):
     def test_user_login_happy_path(self):
         # given
         # when
-        resp = self.client.post(self.login_url, {"username": "email1", "password": "pass"})
+        resp = self.client.post(
+            self.login_url, {"username": "email1", "password": "pass"}
+        )
         # then
         self.assertTrue(resp.wsgi_request.user.is_authenticated)
 
     def test_user_login_fails_on_incorrect_pass(self):
         # given
         # when
-        resp = self.client.post(self.login_url, {"username": "email1", "password": "wrong"})
+        resp = self.client.post(
+            self.login_url, {"username": "email1", "password": "wrong"}
+        )
         # then
         self.assertFalse(resp.wsgi_request.user.is_authenticated)
 
@@ -34,7 +38,11 @@ class TestUserRegister(TestCase):
         # when
         resp = self.client.post(
             self.register_url,
-            {"email": "user1@user.com", "password1": "ComplexPassword!23", "password2": "ComplexPassword!23"},
+            {
+                "email": "user1@user.com",
+                "password1": "ComplexPassword!23",
+                "password2": "ComplexPassword!23",
+            },
         )
         # then
         self.assertEqual(resp.status_code, 302)
@@ -46,7 +54,11 @@ class TestUserRegister(TestCase):
         # when
         resp = self.client.post(
             self.register_url,
-            {"email": "user1@user.com", "password1": "ComplexPassword!23", "password2": "ComplexPassword!23"},
+            {
+                "email": "user1@user.com",
+                "password1": "ComplexPassword!23",
+                "password2": "ComplexPassword!23",
+            },
         )
         # then
         self.assertEqual(resp.status_code, 200)

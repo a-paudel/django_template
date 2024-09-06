@@ -16,7 +16,10 @@ fake = Faker()
 class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
-            "--force", action="store_true", help="Force seed, even if not in debug mode", default=False
+            "--force",
+            action="store_true",
+            help="Force seed, even if not in debug mode",
+            default=False,
         )
         return super().add_arguments(parser)
 

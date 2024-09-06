@@ -1,7 +1,10 @@
 from typing import Any
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import Group as _DjangoGroup, UserManager as _DjangoUserManager
+from django.contrib.auth.models import (
+    Group as _DjangoGroup,
+    UserManager as _DjangoUserManager,
+)
 
 from core.models import BaseModel
 
@@ -18,7 +21,9 @@ class UserManager(_DjangoUserManager):
         user.save()
         return user
 
-    def create_superuser(self, email, password: str | None = None, **extra_fields) -> Any:
+    def create_superuser(
+        self, email, password: str | None = None, **extra_fields
+    ) -> Any:
         if not email:
             raise ValueError("The Email field must be set")
 

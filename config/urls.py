@@ -35,9 +35,21 @@ users_paths = [
     path("register/", RegisterView.as_view(), name="register"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("password-reset/", PasswordResetView.as_view(), name="password_reset"),
-    path("password-reset/email-sent/", PasswordResetEmailSentView.as_view(), name="password_reset_email_sent"),
-    path("password-reset/<uidb64>/<token>", PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
-    path("password-reset/complete", PasswordResetCompleteView.as_view(), name="password_reset_complete"),
+    path(
+        "password-reset/email-sent/",
+        PasswordResetEmailSentView.as_view(),
+        name="password_reset_email_sent",
+    ),
+    path(
+        "password-reset/<uidb64>/<token>",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "password-reset/complete",
+        PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
 ]
 
 
@@ -50,5 +62,3 @@ urlpatterns = [
     # other routes
     path("", RedirectView.as_view(pattern_name="users:login"), name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

@@ -64,12 +64,12 @@ class Command(BaseCommand):
             "table_partial": Path(__file__).parent / "stubs" / "templates" / "table_partial.html.jinja2",
         }
         files_to_create = {
-            "layout": base_dir / "jinja" / "layouts" / f"{app_name}.html",
-            "list": base_dir / "jinja" / app_name / model_name_plural_lower / "list.html",
-            "form": base_dir / "jinja" / app_name / model_name_plural_lower / "form.html",
-            "detail": base_dir / "jinja" / app_name / model_name_plural_lower / "detail.html",
-            "delete": base_dir / "jinja" / app_name / model_name_plural_lower / "delete.html",
-            "table_partial": base_dir / "jinja" / app_name / model_name_plural_lower / "partials" / "table.html",
+            "layout": base_dir / app_name / "jinja2" / app_name / "base.html",
+            "list": base_dir / app_name / "jinja2" / app_name / model_name_plural_lower / "list.html",
+            "form": base_dir / app_name / "jinja2" / app_name / model_name_plural_lower / "form.html",
+            "detail": base_dir / app_name / "jinja2" / app_name / model_name_plural_lower / "detail.html",
+            "delete": base_dir / app_name / "jinja2" / app_name / model_name_plural_lower / "delete.html",
+            "table_partial": base_dir / app_name / "jinja2" / app_name / model_name_plural_lower / "partials" / "table.html",
         }
         # create the folders
         for file in files_to_create.values():
