@@ -8,9 +8,10 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView as _DjangoPasswordResetCompleteView,
 )
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
+from config import settings
 from users.forms import LoginForm, PasswordResetForm, PasswordSetForm, RegisterForm
 
 # Create your views here.
@@ -28,6 +29,16 @@ class LogoutView(_DjangoLogoutView):
 class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = "users/register.html"
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if not settings.ALLOW_REGISTRATION:
+            return HttpResponseNotFound()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if not settings.ALLOW_REGISTRATION:
+            return HttpResponseNotFound()
+        return super().post(request, *args, **kwargs)
 
 
 class PasswordResetView(_DjangoPasswordResetView):
