@@ -39,6 +39,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(";")
 INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "").split(";")
+CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(";")
 
 
 # Application definition
@@ -108,9 +109,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DJANGO_DB_URL", "sqlite:///db.sqlite3")
-    )
+    "default": dj_database_url.config(default=os.getenv("DJANGO_DB_URL", "sqlite:///db.sqlite3"))
     # "default": {
     #     "ENGINE": "django.db.backends.sqlite3",
     #     "NAME": BASE_DIR / "db.sqlite3",
@@ -146,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "users.User"
 LOGIN_URL = reverse_lazy("users:login")
+ALLOW_REGISTRATION = os.getenv("DJANGO_ALLOW_REGISTRATION", "false").lower() == "true"
 
 
 # Internationalization
@@ -173,9 +173,7 @@ EMAIL_PORT = os.getenv("DJANGO_EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_USERNAME")
 EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_PASSWORD")
 EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "").lower() == "true"
-DEFAULT_FROM_EMAIL = (
-    f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
-)
+DEFAULT_FROM_EMAIL = f'{os.getenv("DJANGO_EMAIL_FROM_NAME")} <{os.getenv("DJANGO_EMAIL_FROM_ADDRESS")}>'
 
 # Background tasks settings
 RQ_QUEUES = {

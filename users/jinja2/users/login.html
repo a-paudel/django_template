@@ -18,8 +18,10 @@
 
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
+    {% if config.ALLOW_REGISTRATION %}
     <p class="text-right">
         Don't have an account? <a href="{{ url("users:register") }}" class="link">Register Now</a>
     </p>
+    {% endif %}
 
 {% endblock main %}
