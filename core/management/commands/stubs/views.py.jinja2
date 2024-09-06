@@ -3,18 +3,18 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from {{app_name}}.models import {{model_name}}
-from {{app_name}}.forms.{{model_name_plural_lower}} import {{model_name}}CreateForm, {{model_name}}UpdateForm
+from {{target_app}}.forms.{{model_name_plural_lower}} import {{model_name}}CreateForm, {{model_name}}UpdateForm
 
 
 class {{model_name}}ListView(ListView):
     model = {{model_name}}
-    template_name = "{{app_name}}/{{model_name_plural_lower}}/list.html"
+    template_name = "{{target_app}}/{{model_name_plural_lower}}/list.html"
     paginate_by = 10
 
 
 class {{model_name}}CreateView(CreateView):
     model = {{model_name}}
-    template_name = "{{app_name}}/{{model_name_plural_lower}}/form.html"
+    template_name = "{{target_app}}/{{model_name_plural_lower}}/form.html"
     form_class = {{model_name}}CreateForm
 
     def get_success_url(self) -> str:
@@ -29,12 +29,12 @@ class {{model_name}}CreateView(CreateView):
 
 class {{model_name}}DetailView(DetailView):
     model = {{model_name}}
-    template_name = "{{app_name}}/{{model_name_plural_lower}}/detail.html"
+    template_name = "{{target_app}}/{{model_name_plural_lower}}/detail.html"
 
 
 class {{model_name}}UpdateView(UpdateView):
     model = {{model_name}}
-    template_name = "{{app_name}}/{{model_name_plural_lower}}/form.html"
+    template_name = "{{target_app}}/{{model_name_plural_lower}}/form.html"
     form_class = {{model_name}}UpdateForm
 
     def get_success_url(self) -> str:
@@ -49,7 +49,7 @@ class {{model_name}}UpdateView(UpdateView):
 
 class {{model_name}}DeleteView(DeleteView):
     model = {{model_name}}
-    template_name = "{{app_name}}/{{model_name_plural_lower}}/delete.html"
+    template_name = "{{target_app}}/{{model_name_plural_lower}}/delete.html"
 
     def get_success_url(self) -> str:
         return reverse("{{model_name_plural_lower}}:list")

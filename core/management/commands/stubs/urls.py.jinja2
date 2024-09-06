@@ -1,13 +1,14 @@
 from django.urls import path
-from {{app_name}}.views.{{model_name_plural_lower}} import (
+from {{target_app}}.views.{{model_name_plural_lower}} import (
     {{model_name}}ListView,
     {{model_name}}CreateView,
     {{model_name}}DetailView,
     {{model_name}}UpdateView,
     {{model_name}}DeleteView,
 )
+{% set app_name2 = (target_app + "_") if (app_name != target_app) else "" %}
 
-{{model_name_lower}}_url_patterns = [
+{{app_name2}}{{model_name_lower}}_url_patterns = [
     path("", {{model_name}}ListView.as_view(), name="list"),
     path("create/", {{model_name}}CreateView.as_view(), name="create"),
     path("<int:pk>/", {{model_name}}DetailView.as_view(), name="detail"),
