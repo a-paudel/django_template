@@ -19,6 +19,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 from users.views import (
     LoginView,
     LogoutView,
@@ -46,4 +47,8 @@ urlpatterns = [
     path("rq/", include("django_rq.urls")),
     # add user routes
     path("users/", include((users_paths, "users"), namespace="users")),
+    # other routes
+    path("", RedirectView.as_view(pattern_name="users:login"), name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
