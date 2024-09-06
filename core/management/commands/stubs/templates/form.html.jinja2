@@ -1,4 +1,4 @@
-{{'{%'}} extends 'layouts/{{ app_name }}.html' {{'%}'}}
+{{'{%'}} extends '{{ app_name }}/base.html' {{'%}'}}
 
 {{'{%'}} set is_edit = True if {{ model_name_lower }} else False {{'%}'}}
 {{'{%'}} set action_url = url("{{ model_name_plural_lower }}:update", pk={{ model_name_lower }}.pk) if is_edit else url("{{ model_name_plural_lower }}:create") {{'%}'}}
