@@ -21,16 +21,16 @@ class Command(BaseCommand):
 
     def get_model_key(self, options):
         # try get model from arguments
-        model = options["model"]
-        if model:
+        input_str:str = options["model"]
+        if input_str:
             # check if model is valid
-            appname, modelname = model.split(".")
+            appname, modelname = input_str.split(".")
             try:
                 model = apps.get_model(appname, modelname)
             except LookupError:
                 print(f"Model {appname}.{modelname} not found.")
                 return
-            return model
+            return input_str
 
         apps_to_skip = [
             "admin",
@@ -51,12 +51,11 @@ class Command(BaseCommand):
                 "No valid models found. Check the INSTALLED_APPS setting and models.py files."
             )
             return
-        model_key: str = (
-            inquirer.list_input("Select the model", choices=model_options) or ""
-        )
+        model_key: str|None = inquirer.list_input("Select the model", choices=model_options)
+        model_key = model_key or ""
         return model_key
 
-    def get_target_app(self, options):
+    def get_target_app(self, options, app_name):
         app_list = [app.name for app in apps.get_app_configs()]
         app_folders = [folder.name for folder in settings.BASE_DIR.glob("*") if folder.is_dir()]
         # remove apps that are not apps
@@ -64,20 +63,20 @@ class Command(BaseCommand):
 
         target_app = options["targetapp"]
         if not target_app or target_app not in app_list:
-            target_app = inquirer.list_input("Select the target app", choices=app_list) or ""
+            target_app = inquirer.list_input("Select the target app", choices=app_list, default=app_name) or ""
         return target_app
 
     def handle(self, *args: Any, **options: Any) -> str | None:
         model_key = self.get_model_key(options)
         if not model_key:
             return
-        target_app = self.get_target_app(options)
+        target_app = self.get_target_app(options, model_key.split(".")[0])
         if not target_app:
             return
 
 
 
-        call_command("make_forms", model=model_key)
-        call_command("make_views", model=model_key)
-        call_command("make_templates", model=model_key)
-        call_command("make_urls", model=model_key)
+        call_command("make_forms", model=model_key, targetapp=target_app)
+        call_command("make_views", model=model_key, targetapp=target_app)
+        call_command("make_templates", model=model_key, targetapp=target_app)
+        call_command("make_urls", model=model_key, targetapp=target_app)
