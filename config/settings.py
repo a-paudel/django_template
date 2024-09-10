@@ -188,9 +188,3 @@ DJANGO_VITE = {
         "dev_mode": DEBUG,
     }
 }
-
-
-UNFOLD = {
-    "STYLES": [lambda x: vite_asset_url("resources/css/app.css")],
-    "SCRIPTS": [lambda x: vite_asset_url("resources/js/app.ts")],
-}
