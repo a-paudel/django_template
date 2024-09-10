@@ -16,7 +16,6 @@ import dotenv
 import dj_database_url
 import os
 import pymysql
-from django_vite.templatetags.django_vite import vite_asset_url
 
 pymysql.install_as_MySQLdb()
 

@@ -1,4 +1,3 @@
-from datetime import UTC
 from typing import Any
 from django.core.management.base import BaseCommand, CommandParser
 from django.core.management import call_command

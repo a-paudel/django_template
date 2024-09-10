@@ -9,7 +9,7 @@ from django.contrib.auth.views import (
 )
 
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from config import settings
 from users.forms import LoginForm, PasswordResetForm, PasswordSetForm, RegisterForm
