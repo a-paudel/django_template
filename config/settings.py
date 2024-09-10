@@ -16,7 +16,6 @@ import dotenv
 import dj_database_url
 import os
 import pymysql
-from django_vite.templatetags.django_vite import vite_asset_url
 
 pymysql.install_as_MySQLdb()
 
@@ -160,6 +159,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Email settings
 EMAIL_BACKEND = "django_rq_email_backend.backends.RQEmailBackend"
@@ -187,10 +188,4 @@ DJANGO_VITE = {
     "default": {
         "dev_mode": DEBUG,
     }
-}
-
-
-UNFOLD = {
-    "STYLES": [lambda x: vite_asset_url("resources/css/app.css")],
-    "SCRIPTS": [lambda x: vite_asset_url("resources/js/app.ts")],
 }

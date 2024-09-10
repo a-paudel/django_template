@@ -1,4 +1,3 @@
-from email.policy import default
 from pathlib import Path
 from typing import Any
 from django.core.management.base import BaseCommand, CommandParser
@@ -11,11 +10,12 @@ import inquirer
 
 class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
+        parser.add_argument("--model", type=str, help="The model in app.model format.", required=False)
         parser.add_argument(
-            "--model", type=str, help="The model in app.model format.", required=False
-        )
-        parser.add_argument(
-            "--targetapp", type=str, help="The app to create the CRUD files in.", required=False,
+            "--targetapp",
+            type=str,
+            help="The app to create the CRUD files in.",
+            required=False,
         )
         return super().add_arguments(parser)
 
@@ -47,16 +47,11 @@ class Command(BaseCommand):
             for modelname, model in modeldict.items():
                 model_options[f"{appname}.{modelname}"] = model
         if not model_options:
-            print(
-                "No valid models found. Check the INSTALLED_APPS setting and models.py files."
-            )
+            print("No valid models found. Check the INSTALLED_APPS setting and models.py files.")
             return
-        model_key: str = (
-            inquirer.list_input("Select the model", choices=model_options) or ""
-        )
+        model_key: str = inquirer.list_input("Select the model", choices=model_options) or ""
         model = model_options.get(model_key, None)
         return model
-
 
     def get_target_app(self, options, app_name):
         app_list = [app.name for app in apps.get_app_configs()]
@@ -64,9 +59,9 @@ class Command(BaseCommand):
         # remove apps that are not apps
         app_list = [app for app in app_list if app in app_folders]
 
-        target_app:str = options["targetapp"]
+        target_app: str = options["targetapp"]
         if not target_app or target_app not in app_list:
-            target_app:str = inquirer.list_input("Select the target app", choices=app_list, default=app_name) or ""
+            target_app: str = inquirer.list_input("Select the target app", choices=app_list, default=app_name) or ""
         return target_app
 
     def handle(self, *args: Any, **options: Any) -> str | None:
@@ -77,8 +72,8 @@ class Command(BaseCommand):
         if not target_app:
             return
         app_name = model._meta.app_label
-        model_name = model._meta.model_name or ""
-        model_name = model_name.title().replace(" ", "")
+        model_name = model.__name__
+        model_name = model_name.replace(" ", "")
         model_name_lower = model_name.lower()
         model_name_plural = model._meta.verbose_name_plural or ""
         model_name_plural = model_name_plural.replace(" ", "")
@@ -104,9 +99,7 @@ class Command(BaseCommand):
             if file.exists():
                 content = file.read_text()
                 if "class" in content:
-                    print(
-                        f"File {file} is not empty. Please move the classes to the module and delete file manually."
-                    )
+                    print(f"File {file} is not empty. Please move the classes to the module and delete file manually.")
                 else:
                     file.unlink()
 
