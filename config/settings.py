@@ -160,6 +160,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "public"
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Email settings
 EMAIL_BACKEND = "django_rq_email_backend.backends.RQEmailBackend"
