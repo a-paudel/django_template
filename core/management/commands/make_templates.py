@@ -13,7 +13,10 @@ class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("--model", type=str, help="The model in app.model format.", required=False)
         parser.add_argument(
-            "--targetapp", type=str, help="The app to create the CRUD files in.", required=False,
+            "--targetapp",
+            type=str,
+            help="The app to create the CRUD files in.",
+            required=False,
         )
         return super().add_arguments(parser)
 
@@ -44,7 +47,6 @@ class Command(BaseCommand):
         model = model_options.get(model_key, None)
         return model
 
-
     def get_target_app(self, options, app_name):
         app_list = [app.name for app in apps.get_app_configs()]
         app_folders = [folder.name for folder in settings.BASE_DIR.glob("*") if folder.is_dir()]
@@ -64,8 +66,8 @@ class Command(BaseCommand):
         if not target_app:
             return
         app_name = model._meta.app_label
-        model_name = model._meta.model_name or ""
-        model_name = model_name.title().replace(" ", "")
+        model_name = model.__name__
+        model_name = model_name.replace(" ", "")
         model_name_lower = model_name.lower()
         model_name_plural = model._meta.verbose_name_plural or ""
         model_name_plural = model_name_plural.replace(" ", "")
@@ -88,7 +90,13 @@ class Command(BaseCommand):
             "form": base_dir / target_app / "jinja2" / target_app / model_name_plural_lower / "form.html",
             "detail": base_dir / target_app / "jinja2" / target_app / model_name_plural_lower / "detail.html",
             "delete": base_dir / target_app / "jinja2" / target_app / model_name_plural_lower / "delete.html",
-            "table_partial": base_dir / target_app / "jinja2" / target_app / model_name_plural_lower / "partials" / "table.html",
+            "table_partial": base_dir
+            / target_app
+            / "jinja2"
+            / target_app
+            / model_name_plural_lower
+            / "partials"
+            / "table.html",
         }
         # create the folders
         for file in files_to_create.values():
